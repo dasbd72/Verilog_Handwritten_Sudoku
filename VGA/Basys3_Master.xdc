@@ -262,9 +262,6 @@ set_property IOSTANDARD LVCMOS33 [get_ports hsync]
 set_property PACKAGE_PIN R19 [get_ports vsync]
 set_property IOSTANDARD LVCMOS33 [get_ports vsync]
 
-set_property PACKAGE_PIN V17 [get_ports change]
-set_property IOSTANDARD LVCMOS33 [get_ports change]
-
 ##USB-RS232 Interface
 #set_property IOSTANDARD LVCMOS33 [get_ports RsRx]
 #set_property PACKAGE_PIN A18 [get_ports RsTx]

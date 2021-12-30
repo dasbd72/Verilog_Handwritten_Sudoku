@@ -1,7 +1,6 @@
 module top(
 	input clk,
 	input rst,
-	input change,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
@@ -14,16 +13,15 @@ module top(
 	wire clk_22;
 	wire [16:0] pixel_addr;
 	wire [11:0] pixel;
-	wire [11:0] pixel_out [1:0];
+	wire show_data;
+	wire [11:0] pixel_data;
+	wire [11:0] pixel_out;
 	wire valid;
 	wire [9:0] h_cnt; //640
 	wire [9:0] v_cnt;  //480
 
 	assign {vgaRed, vgaGreen, vgaBlue} = (valid==1'b1) ? pixel :12'h0;
-	assign pixel = (change) ? pixel_out[0] : pixel_out[1];
-
-	wire ena0 = change;
-	wire ena1 = ~change;
+	assign pixel = (show_data) ? pixel_data : pixel_out;
 
 	clock_divisor clk_wiz_0_inst(
 		.clk(clk),
@@ -38,21 +36,20 @@ module top(
 	.v_cnt(v_cnt),
 	.pixel_addr(pixel_addr)
 	);
+
+	pixel_gen pixel_gen_inst(
+       .h_cnt(h_cnt),
+	   .v_cnt(v_cnt),
+	   .show_data(show_data),
+	   .pixel(pixel_data)
+    );
 		
 	blk_mem_gen_0 blk_mem_gen_0_inst(
 		.clka(clk_25MHz),
 		.wea(0),
 		.addra(pixel_addr),
 		.dina(data[11:0]),
-		.douta(pixel_out[0])
-	); 
-
-	blk_mem_gen_1 blk_mem_gen_1_inst(
-		.clka(clk_25MHz),
-		.wea(0),
-		.addra(pixel_addr),
-		.dina(data[11:0]),
-		.douta(pixel_out[1])
+		.douta(pixel_out)
 	); 
 
 	vga_controller   vga_inst(
