@@ -29,9 +29,36 @@ module Sudoku_Solver (clk, reading, data, valid, done);
     // ==========================
     // Check the sudoku is valid
     // ==========================
-    reg [0:8] row_vaild;
-    reg [0:8] col_vaild;
-    reg [0:8] block_valid;
+    wire [0:8] row_vaild;
+    Check_Valid CV_row0(row_vaild[0], board[0][0], board[0][1], board[0][2], board[0][3], board[0][4], board[0][5], board[0][6], board[0][7], board[0][8]);
+    Check_Valid CV_row1(row_vaild[1], board[1][0], board[1][1], board[1][2], board[1][3], board[1][4], board[1][5], board[1][6], board[1][7], board[1][8]);
+    Check_Valid CV_row2(row_vaild[2], board[2][0], board[2][1], board[2][2], board[2][3], board[2][4], board[2][5], board[2][6], board[2][7], board[2][8]);
+    Check_Valid CV_row3(row_vaild[3], board[3][0], board[3][1], board[3][2], board[3][3], board[3][4], board[3][5], board[3][6], board[3][7], board[3][8]);
+    Check_Valid CV_row4(row_vaild[4], board[4][0], board[4][1], board[4][2], board[4][3], board[4][4], board[4][5], board[4][6], board[4][7], board[4][8]);
+    Check_Valid CV_row5(row_vaild[5], board[5][0], board[5][1], board[5][2], board[5][3], board[5][4], board[5][5], board[5][6], board[5][7], board[5][8]);
+    Check_Valid CV_row6(row_vaild[6], board[6][0], board[6][1], board[6][2], board[6][3], board[6][4], board[6][5], board[6][6], board[6][7], board[6][8]);
+    Check_Valid CV_row7(row_vaild[7], board[7][0], board[7][1], board[7][2], board[7][3], board[7][4], board[7][5], board[7][6], board[7][7], board[7][8]);
+    Check_Valid CV_row8(row_vaild[8], board[8][0], board[8][1], board[8][2], board[8][3], board[8][4], board[8][5], board[8][6], board[8][7], board[8][8]);
+    wire [0:8] col_vaild;
+    Check_Valid CV_col0(col_vaild[0], board[0][0], board[1][0], board[2][0], board[3][0], board[4][0], board[5][0], board[6][0], board[7][0], board[8][0]);
+    Check_Valid CV_col1(col_vaild[1], board[0][1], board[1][1], board[2][1], board[3][1], board[4][1], board[5][1], board[6][1], board[7][1], board[8][1]);
+    Check_Valid CV_col2(col_vaild[2], board[0][2], board[1][2], board[2][2], board[3][2], board[4][2], board[5][2], board[6][2], board[7][2], board[8][2]);
+    Check_Valid CV_col3(col_vaild[3], board[0][3], board[1][3], board[2][3], board[3][3], board[4][3], board[5][3], board[6][3], board[7][3], board[8][3]);
+    Check_Valid CV_col4(col_vaild[4], board[0][4], board[1][4], board[2][4], board[3][4], board[4][4], board[5][4], board[6][4], board[7][4], board[8][4]);
+    Check_Valid CV_col5(col_vaild[5], board[0][5], board[1][5], board[2][5], board[3][5], board[4][5], board[5][5], board[6][5], board[7][5], board[8][5]);
+    Check_Valid CV_col6(col_vaild[6], board[0][6], board[1][6], board[2][6], board[3][6], board[4][6], board[5][6], board[6][6], board[7][6], board[8][6]);
+    Check_Valid CV_col7(col_vaild[7], board[0][7], board[1][7], board[2][7], board[3][7], board[4][7], board[5][7], board[6][7], board[7][7], board[8][7]);
+    Check_Valid CV_col8(col_vaild[8], board[0][8], board[1][8], board[2][8], board[3][8], board[4][8], board[5][8], board[6][8], board[7][8], board[8][8]);
+    wire [0:8] blk_valid;
+    Check_Valid CV_blk0(blk_valid[0], board[0][0], board[0][1], board[0][2], board[1][0], board[1][1], board[1][2], board[2][0], board[2][1], board[2][2]);
+    Check_Valid CV_blk1(blk_valid[1], board[0][3], board[0][4], board[0][5], board[1][3], board[1][4], board[1][5], board[2][3], board[2][4], board[2][5]);
+    Check_Valid CV_blk2(blk_valid[2], board[0][6], board[0][7], board[0][8], board[1][6], board[1][7], board[1][8], board[2][6], board[2][7], board[2][8]);
+    Check_Valid CV_blk3(blk_valid[3], board[3][0], board[3][1], board[3][2], board[4][0], board[4][1], board[4][2], board[5][0], board[5][1], board[5][2]);
+    Check_Valid CV_blk4(blk_valid[4], board[3][3], board[3][4], board[3][5], board[4][3], board[4][4], board[4][5], board[5][3], board[5][4], board[5][5]);
+    Check_Valid CV_blk5(blk_valid[5], board[3][6], board[3][7], board[3][8], board[4][6], board[4][7], board[4][8], board[5][6], board[5][7], board[5][8]);
+    Check_Valid CV_blk6(blk_valid[6], board[6][0], board[6][1], board[6][2], board[7][0], board[7][1], board[7][2], board[8][0], board[8][1], board[8][2]);
+    Check_Valid CV_blk7(blk_valid[7], board[6][3], board[6][4], board[6][5], board[7][3], board[7][4], board[7][5], board[8][3], board[8][4], board[8][5]);
+    Check_Valid CV_blk8(blk_valid[8], board[6][6], board[6][7], board[6][8], board[7][6], board[7][7], board[7][8], board[8][6], board[8][7], board[8][8]);
 
     // ==========================
     // Clock update
@@ -89,9 +116,11 @@ module Sudoku_Solver (clk, reading, data, valid, done);
         endcase
     end
 
+
+    
 endmodule
 
-module check_valid (valid, data0, data1, data2, data3, data4, data5, data6, data7, data8);
+module Check_Valid (valid, data0, data1, data2, data3, data4, data5, data6, data7, data8);
     output valid;
     input [10:0] data0, data1, data2;
     input [10:0] data3, data4, data5;
@@ -123,16 +152,16 @@ module check_valid (valid, data0, data1, data2, data3, data4, data5, data6, data
     
 endmodule
 
-module check_same (same, target, data1, data2, data3, data4, data5, data6, data7, data8);
-    output valid;
+module Check_Same (valid, target, data1, data2, data3, data4, data5, data6, data7, data8);
     input [10:0] target, data1, data2;
     input [10:0] data3, data4, data5;
     input [10:0] data6, data7, data8;
+    output valid;
 
-    assign valid = (target[10]) | 
+    assign valid = target[10] | (!target[10] & !same);
 
-    assign same = (target[9:0] == data1[9:0]) | (target[9:0] == data2[9:0]) | (target[9:0] == data3[9:0]) |
-                  (target[9:0] == data4[9:0]) | (target[9:0] == data5[9:0]) | (target[9:0] == data6[9:0]) |
-                  (target[9:0] == data7[9:0]) | (target[9:0] == data8[9:0]);
+    assign same = target[9:0] == data1[9:0] | target[9:0] == data2[9:0] | target[9:0] == data3[9:0] |
+                  target[9:0] == data4[9:0] | target[9:0] == data5[9:0] | target[9:0] == data6[9:0] |
+                  target[9:0] == data7[9:0] | target[9:0] == data8[9:0];
 
 endmodule
