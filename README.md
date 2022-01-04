@@ -6,8 +6,8 @@
 
 ## Memory Usage (tot : 2 _ 1024 _ 1024 = 2097152)
 
-- Picture : 12 \* 76800 = 921600
--
+- Picture_Menu : 1 \*  76800 = 76800
+- Picture_Game : 12 \* 76800 = 921600
 
 ## Dependency
 
