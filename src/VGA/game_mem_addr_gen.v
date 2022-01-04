@@ -1,4 +1,4 @@
-module game_mem_addr_gen(
+module Game_Mem_Addr_Gen(
    input clk,
    input rst,
    input [9:0] h_cnt,

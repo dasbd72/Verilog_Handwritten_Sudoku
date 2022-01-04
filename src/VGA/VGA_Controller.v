@@ -3,7 +3,7 @@
 // Module Name: vga
 /////////////////////////////////////////////////////////////////
 
-module vga_controller 
+module Vga_Controller 
   (
     input wire pclk,reset,
     output wire hsync,vsync,valid,

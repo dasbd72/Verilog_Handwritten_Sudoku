@@ -1,4 +1,4 @@
-module top(
+module VGA_Top(
 	input clk,
 	input rst,
 	output [3:0] vgaRed,
@@ -29,7 +29,7 @@ module top(
 		.clk22(clk_22)
 	);
 
-	game_mem_addr_gen game_mem_addr_gen_inst(
+	Game_Mem_Addr_Gen game_mem_addr_gen_inst(
 		.clk(clk_22),
 		.rst(rst),
 		.h_cnt(h_cnt),
@@ -37,13 +37,13 @@ module top(
 		.pixel_addr(pixel_game)
 	);
 
-	menu_pixel_gen menu_pixel_gen_inst(
+	Menu_Pixel_Gen menu_pixel_gen_inst(
        .h_cnt(h_cnt),
 	   .v_cnt(v_cnt),
 	   .pixel(pixel_menu)
     );
 
-	number_pixel_gen number_pixel_gen_inst(
+	Number_Pixel_Gen number_pixel_gen_inst(
        .h_cnt(h_cnt),
 	   .v_cnt(v_cnt),
 	   .index(index),
@@ -59,7 +59,7 @@ module top(
 		.douta(pixel_out)
 	); 
 
-	vga_controller   vga_inst(
+	Vga_Controller vga_inst(
 		.pclk(clk_25MHz),
 		.reset(rst),
 		.hsync(hsync),

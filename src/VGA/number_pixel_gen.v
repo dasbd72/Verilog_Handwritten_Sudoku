@@ -1,4 +1,4 @@
-module number_pixel_gen(
+module Number_Pixel_Gen(
     input [9:0] h_cnt,
     input [9:0] v_cnt,
     input [9:0] index,
@@ -13,7 +13,7 @@ module number_pixel_gen(
     wire [9:0] row = index / 9 * 52;
     wire [9:0] col = index % 9 * 52;
 
-    always @(*) begin
-        if (h_cnt <= row)
-    end
+    // always @(*) begin
+    //     if (h_cnt <= row)
+    // end
 endmodule

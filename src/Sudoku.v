@@ -91,7 +91,7 @@ module Sudoku_Solver (clk, reading, data, valid, done);
 
 endmodule
 
-module check_valid (valid, data0, data1, data2, data3, data4, data5, data6, data7, data8);
+module Check_Valid (valid, data0, data1, data2, data3, data4, data5, data6, data7, data8);
     output valid;
     input [10:0] data0, data1, data2;
     input [10:0] data3, data4, data5;
@@ -123,7 +123,7 @@ module check_valid (valid, data0, data1, data2, data3, data4, data5, data6, data
     
 endmodule
 
-module check_same (same, target, data1, data2, data3, data4, data5, data6, data7, data8);
+module Check_Same (same, target, data1, data2, data3, data4, data5, data6, data7, data8);
     output valid;
     input [10:0] target, data1, data2;
     input [10:0] data3, data4, data5;
