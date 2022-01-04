@@ -1,4 +1,4 @@
-module mem_addr_gen(
+module game_mem_addr_gen(
    input clk,
    input rst,
    input [9:0] h_cnt,
@@ -6,6 +6,6 @@ module mem_addr_gen(
    output [16:0] pixel_addr
    );
 
-   assign pixel_addr = ((h_cnt>>1)+320*(v_cnt>>1))% 76800;  //640*480 --> 320*240 
+   assign pixel_addr = ((h_cnt>>1)+320*(v_cnt>>1))% 76800;  // 640*480 --> 320*240 
    
 endmodule

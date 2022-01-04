@@ -17,8 +17,8 @@ module top(
 	wire [11:0] pixel_data;
 	wire [11:0] pixel_out;
 	wire valid;
-	wire [9:0] h_cnt; //640
-	wire [9:0] v_cnt;  //480
+	wire [9:0] h_cnt;  // 640
+	wire [9:0] v_cnt;  // 480
 
 	assign {vgaRed, vgaGreen, vgaBlue} = (valid==1'b1) ? pixel :12'h0;
 	assign pixel = (show_data) ? pixel_data : pixel_out;
@@ -29,19 +29,26 @@ module top(
 		.clk22(clk_22)
 	);
 
-	mem_addr_gen mem_addr_gen_inst(
-	.clk(clk_22),
-	.rst(rst),
-	.h_cnt(h_cnt),
-	.v_cnt(v_cnt),
-	.pixel_addr(pixel_addr)
+	game_mem_addr_gen game_mem_addr_gen_inst(
+		.clk(clk_22),
+		.rst(rst),
+		.h_cnt(h_cnt),
+		.v_cnt(v_cnt),
+		.pixel_addr(pixel_game)
 	);
 
-	pixel_gen pixel_gen_inst(
+	menu_pixel_gen menu_pixel_gen_inst(
        .h_cnt(h_cnt),
 	   .v_cnt(v_cnt),
-	   .show_data(show_data),
-	   .pixel(pixel_data)
+	   .pixel(pixel_menu)
+    );
+
+	number_pixel_gen number_pixel_gen_inst(
+       .h_cnt(h_cnt),
+	   .v_cnt(v_cnt),
+	   .index(index),
+	   .number(number),
+	   .pixel(pixel_number)
     );
 		
 	blk_mem_gen_0 blk_mem_gen_0_inst(
