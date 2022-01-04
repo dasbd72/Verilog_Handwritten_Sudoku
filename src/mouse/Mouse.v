@@ -1,4 +1,4 @@
-module mouse(
+module Mouse(
     input clk,
     input [9 : 0] h_cntr_reg,
     input [9 : 0] v_cntr_reg,
