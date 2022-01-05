@@ -1,8 +1,9 @@
-module Pixel_Gen (h_cnt, v_cnt, clka, stage, pixel);
+module Pixel_Gen (h_cnt, v_cnt, clka, stage, board, pixel);
     input [9:0] h_cnt; 
-	input [9:0] v_cnt; 
+	input [9:0] v_cnt; 	
     input clka;
     input stage;
+	input [9*9*4-1:0] board;
     output reg [11:0] pixel;
 
 	parameter SIZE = 52;
@@ -17,12 +18,12 @@ module Pixel_Gen (h_cnt, v_cnt, clka, stage, pixel);
     // Address for pixel
     // ==========================
     wire [16:0] pixel_background_addr;
-	wire [11:0] pixel_num_addr [0:9];
+	wire pixel_num_addr;
 
     // ==========================
     // Number display enable signals
     // ==========================
-	wire [0:9] enable_num_display;
+	wire enable_num_display;
 
     // ==========================
     // different Pixels
@@ -31,31 +32,78 @@ module Pixel_Gen (h_cnt, v_cnt, clka, stage, pixel);
 	wire pixel_menu;
     wire [0:9] pixel_number;
 
+	// ==========================
+    // Row and column
+    // ==========================
+	reg [3:0] row;
+	reg [3:0] col;
+
+	always @(*) begin
+		if (h_cnt <= 51) begin
+			row = 4'h0;
+		end else if (h_cnt <= 105) begin
+			row = 4'h1;
+		end else if (h_cnt <= 159) begin
+			row = 4'h2;
+		end else if (h_cnt <= 211) begin
+			row = 4'h3;
+		end else if (h_cnt <= 265) begin
+			row = 4'h4;
+		end else if (h_cnt <= 319) begin
+			row = 4'h5;
+		end else if (h_cnt <= 371) begin
+			row = 4'h6;
+		end else if (h_cnt <= 425) begin
+			row = 4'h7;
+		end else if (h_cnt <= 479) begin
+			row = 4'h8;
+		end else begin
+			row = 4'hf;
+		end
+	end 
+
+	always @(*) begin
+		if (v_cnt <= 51) begin
+			col = 4'h0;
+		end else if (v_cnt <= 105) begin
+			col = 4'h1;
+		end else if (v_cnt <= 159) begin
+			col = 4'h2;
+		end else if (v_cnt <= 211) begin
+			col = 4'h3;
+		end else if (v_cnt <= 265) begin
+			col = 4'h4;
+		end else if (v_cnt <= 319) begin
+			col = 4'h5;
+		end else if (v_cnt <= 371) begin
+			col = 4'h6;
+		end else if (v_cnt <= 425) begin
+			col = 4'h7;
+		end else if (v_cnt <= 479) begin
+			col = 4'h8;
+		end else begin
+			col = 4'hf;
+		end
+	end 
+
     // --------------- Address assign --------------- // 
     assign pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
-	assign pixel_num_addr[0] = enable_num_display[0] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[0]) : 0;
-	assign pixel_num_addr[1] = enable_num_display[1] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[1]) : 0;
-	assign pixel_num_addr[2] = enable_num_display[2] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[2]) : 0;
-	assign pixel_num_addr[3] = enable_num_display[3] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[3]) : 0;
-	assign pixel_num_addr[4] = enable_num_display[4] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[4]) : 0;
-	assign pixel_num_addr[5] = enable_num_display[5] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[5]) : 0;
-	assign pixel_num_addr[6] = enable_num_display[6] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[6]) : 0;
-	assign pixel_num_addr[7] = enable_num_display[7] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[7]) : 0;
-	assign pixel_num_addr[8] = enable_num_display[8] ? (v_cnt-blk_pos[0]) * SIZE + (h_cnt-blk_pos[8]) : 0;
-	assign pixel_num_addr[9] = enable_num_display[9] ? (v_cnt-blk_pos[1]) * SIZE + (h_cnt-blk_pos[0]) : 0;
+	always @(*) begin
+		if (enable_num_display == 0) begin
+			pixel_num_addr = 0;
+		end else begin
+			pixel_num_addr = enable_num_display ? (v_cnt-blk_pos[col]) * SIZE + (h_cnt-blk_pos[row]) : 0;
+		end
+	end
 	
     // --------------- Enable number signals assign --------------- // 
-    assign enable_num_display[0] = (blk_pos[0] <= h_cnt && h_cnt < blk_pos[0]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[1] = (blk_pos[1] <= h_cnt && h_cnt < blk_pos[1]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[2] = (blk_pos[2] <= h_cnt && h_cnt < blk_pos[2]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[3] = (blk_pos[3] <= h_cnt && h_cnt < blk_pos[3]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[4] = (blk_pos[4] <= h_cnt && h_cnt < blk_pos[4]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[5] = (blk_pos[5] <= h_cnt && h_cnt < blk_pos[5]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[6] = (blk_pos[6] <= h_cnt && h_cnt < blk_pos[6]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[7] = (blk_pos[7] <= h_cnt && h_cnt < blk_pos[7]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[8] = (blk_pos[8] <= h_cnt && h_cnt < blk_pos[8]+SIZE) & (blk_pos[0] <= v_cnt && v_cnt < blk_pos[0]+SIZE);
-	assign enable_num_display[9] = (blk_pos[0] <= h_cnt && h_cnt < blk_pos[0]+SIZE) & (blk_pos[1] <= v_cnt && v_cnt < blk_pos[1]+SIZE);
-
+	always @(*) begin
+		if (col == 4'hf) begin
+			enable_num_display = 0;
+		end else begin
+			enable_num_display = (blk_pos[row] <= h_cnt && h_cnt < blk_pos[row]+SIZE) & (blk_pos[col] <= v_cnt && v_cnt < blk_pos[col]+SIZE);
+		end
+	end
 
     always @(*) begin
 		if (stage == Menu) begin
