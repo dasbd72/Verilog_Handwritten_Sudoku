@@ -14,10 +14,10 @@ module Scale(
             for(col=0; col < SIZE; col=col+1) begin
                 if(row >= 2 && row < 26 && col >= 2 && col < 26) begin
                     assign scaled_img[row*SIZE + col] = {
-                        img[(row-2)*2*RAW_SIZE+(col-2)*2] ||
-                        img[((row-2)*2 + 1)*RAW_SIZE+(col-2)*2] ||
-                        img[(row-2)*2*RAW_SIZE+(col-2)*2 + 1] ||
-                        img[((row-2)*2 + 1)*RAW_SIZE+(col-2)*2 + 1]
+                        img[(row-1)*2*RAW_SIZE+(col-1)*2] ||
+                        img[((row-1)*2 + 1)*RAW_SIZE+(col-1)*2] ||
+                        img[(row-1)*2*RAW_SIZE+(col-1)*2 + 1] ||
+                        img[((row-1)*2 + 1)*RAW_SIZE+(col-1)*2 + 1]
                     };
                 end else begin
                     assign scaled_img[row*SIZE + col] = 0;

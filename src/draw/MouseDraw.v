@@ -17,7 +17,6 @@ module MouseDraw #(
     localparam SEND  = 2'd1;
     localparam MAXCNT = 31'd150000000; // 10**8
 
-
     wire            SWAIT_2_SDRAW;
     wire            SDRAW_2_SEND;
     reg             next_valid;
