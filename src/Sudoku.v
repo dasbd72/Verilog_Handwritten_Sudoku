@@ -85,7 +85,6 @@ module Sudoku_Solver (clk, start, reset, data, valid, done);
     // ==========================
     always @(*) begin
         case (State)
-            // ----------------- Read -----------------
             Read: begin
                 /* Start reading data one by one */
                 if (start) begin
@@ -110,7 +109,6 @@ module Sudoku_Solver (clk, start, reset, data, valid, done);
                     grid_count_next = grid_count;
                 end
             end
-            // ----------------- Finish -----------------
             Finish: begin
                 if (start) State_next = Read;
                 else State_next = Finish;
@@ -119,7 +117,6 @@ module Sudoku_Solver (clk, start, reset, data, valid, done);
                 valid = board_valid;
                 done = 1;
             end
-            // ----------------- ----- -----------------
             default: begin
                 valid = 0;
                 done = 0;
