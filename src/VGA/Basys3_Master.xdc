@@ -9,8 +9,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports clk]
 create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_ports clk]
 
 ## Switches
-set_property PACKAGE_PIN V17 [get_ports {change}]
-set_property IOSTANDARD LVCMOS33 [get_ports {change}]
+set_property PACKAGE_PIN R2 [get_ports stage]
+set_property IOSTANDARD LVCMOS33 [get_ports stage]
 #set_property PACKAGE_PIN V16 [get_ports {sw[1]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {sw[1]}]
 #set_property PACKAGE_PIN W16 [get_ports {sw[2]}]
@@ -108,16 +108,14 @@ set_property IOSTANDARD LVCMOS33 [get_ports {change}]
 
 
 ##Buttons
-#set_property PACKAGE_PIN U18 [get_ports btnC]
-#set_property IOSTANDARD LVCMOS33 [get_ports btnC]
-#set_property PACKAGE_PIN T18 [get_ports btnU]
-#set_property IOSTANDARD LVCMOS33 [get_ports btnU]
+set_property PACKAGE_PIN U18 [get_ports btnC]
+set_property IOSTANDARD LVCMOS33 [get_ports btnC]
+set_property PACKAGE_PIN T18 [get_ports btnU]
+set_property IOSTANDARD LVCMOS33 [get_ports btnU]
 #set_property PACKAGE_PIN W19 [get_ports btnL]
 #set_property IOSTANDARD LVCMOS33 [get_ports btnL]
 #set_property PACKAGE_PIN T17 [get_ports btnR]
 #set_property IOSTANDARD LVCMOS33 [get_ports btnR]
-set_property PACKAGE_PIN U17 [get_ports rst]
-set_property IOSTANDARD LVCMOS33 [get_ports rst]
 
 
 
@@ -269,12 +267,16 @@ set_property IOSTANDARD LVCMOS33 [get_ports vsync]
 
 
 ##USB HID (PS/2)
-#set_property PACKAGE_PIN C17 [get_ports PS2Clk]
-#set_property IOSTANDARD LVCMOS33 [get_ports PS2Clk]
-#set_property PULLUP true [get_ports PS2Clk]
-#set_property PACKAGE_PIN B17 [get_ports PS2Data]
-#set_property IOSTANDARD LVCMOS33 [get_ports PS2Data]
-#set_property PULLUP true [get_ports PS2Data]
+set_property IOSTANDARD LVCMOS33 [get_ports PS2_CLK]
+set_property IOSTANDARD LVCMOS33 [get_ports PS2_DATA]
+set_property PACKAGE_PIN C17 [get_ports PS2_CLK]
+set_property PACKAGE_PIN B17 [get_ports PS2_DATA]
+# set_property PACKAGE_PIN C17 [get_ports PS2Clk]
+# set_property IOSTANDARD LVCMOS33 [get_ports PS2Clk]
+# set_property PULLUP true [get_ports PS2Clk]
+# set_property PACKAGE_PIN B17 [get_ports PS2Data]
+# set_property IOSTANDARD LVCMOS33 [get_ports PS2Data]
+# set_property PULLUP true [get_ports PS2Data]
 
 
 ##Quad SPI Flash
@@ -299,3 +301,12 @@ set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]
 
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
+
+set_property PACKAGE_PIN V17 [get_ports {in_data[0]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {in_data[0]}]
+set_property PACKAGE_PIN V16 [get_ports {in_data[1]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {in_data[1]}]
+set_property PACKAGE_PIN W16 [get_ports {in_data[2]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {in_data[2]}]
+set_property PACKAGE_PIN W17 [get_ports {in_data[3]}]
+set_property IOSTANDARD LVCMOS33 [get_ports {in_data[3]}]
