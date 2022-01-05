@@ -1,7 +1,7 @@
 module VGA_Top(
 	input clk,
 	input rst,
-	input change,
+	input stage,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
@@ -41,7 +41,7 @@ module VGA_Top(
 		.h_cnt(h_cnt),
 		.v_cnt(v_cnt),
 		.clka(clk_25MHz),
-		.state(change),
+		.stage(stage),
 		.pixel(pixel_out)
 	);
 

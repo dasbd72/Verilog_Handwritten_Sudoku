@@ -1,8 +1,8 @@
-module Pixel_Gen (h_cnt, v_cnt, clka, state, pixel);
+module Pixel_Gen (h_cnt, v_cnt, clka, stage, pixel);
     input [9:0] h_cnt; 
 	input [9:0] v_cnt; 
     input clka;
-    input state;
+    input stage;
     output reg [11:0] pixel;
 
 	parameter SIZE = 52;
@@ -58,7 +58,7 @@ module Pixel_Gen (h_cnt, v_cnt, clka, state, pixel);
 
 
     always @(*) begin
-		if (state == Menu) begin
+		if (stage == Menu) begin
 			pixel = (pixel_menu) ? 12'h000 : 12'hfff;
 		end else begin
 			if (pixel_number == 0) begin
