@@ -1,30 +1,25 @@
-module Sudoku_Solver (clk, reset, start, read, block_pos, data, init_board, board, valid, done);
-    input clk;
-    input reset;
-    input start;
-    input read;
-    input [6:0] block_pos;
-    input [3:0] data;
-    input [9*9*4-1:0]  init_board;
-    output reg [9*9*4-1:0] board;
-    output reg valid;
-    output reg done;
+module Sudoku_Solver (
+    input clk,
+    input reset,
+    input start,
+    input read,
+    input [3:0] row,
+    input [3:0] col,
+    input [3:0] data,
+    input [81*4-1:0] init_board,
+    input [81-1:0]   board_blank,
+    output reg [81*4-1:0] board,
+    output reg valid
+    );
     
-    parameter SIZE = 9*9*4;
+    parameter SIZE = 81*4;
 
     // ==========================
-    // State parameters
+    // Row and column
     // ==========================
-    reg State, State_next;
-    parameter WAIT =  0;
-    parameter READ = 1;
     reg [3:0] data_next;
-
-    // ==========================
-    // The current reading position
-    // ==========================
-    assign row = block_pos / 9;
-    assign col = block_pos - row * 9;
+    reg [3:0] row_next;
+    reg [3:0] col_next;
 
     // ==========================
     // Check the sudoku is valid
@@ -97,11 +92,11 @@ module Sudoku_Solver (clk, reset, start, read, block_pos, data, init_board, boar
     // ==========================
     always @(posedge clk) begin
         if (reset) begin
-            State <= WAIT;
             board <= 0;
+        end else if (start) begin 
+            board <= init_board;
         end else begin    
-            State <= State_next;
-            board[SIZE-(1+row*9*4+col*4)-:4] <= data_next;
+            board[(row_next*9+col_next)*4+3-:4] <= data_next;
         end
     end
 
@@ -109,30 +104,15 @@ module Sudoku_Solver (clk, reset, start, read, block_pos, data, init_board, boar
     // State operations
     // ==========================
     always @(*) begin
-        case (State)
-            WAIT: begin
-                if (read) begin
-                    done = 0;
-                    State_next = READ;
-                    data_next = data;
-                end else begin
-                    done = done;
-                    State_next = WAIT;
-                    data_next = data_next;
-                end
-                State_next = WAIT;
-            end
-            READ: begin
-                done = 1;
-                State_next = WAIT;
-                data_next = data_next;
-            end
-            default: begin
-                done = 0;
-                State_next = WAIT;
-                data_next = data_next;
-            end
-        endcase
+        if (read && board_blank[row*9+col]) begin
+            data_next = data;
+            row_next = row;
+            col_next = col;
+        end else begin
+            row_next = row_next;
+            col_next =col_next;
+            data_next = board[(row_next*9+col_next)*4+3-:4];
+        end
     end
     
 endmodule

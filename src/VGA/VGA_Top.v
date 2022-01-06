@@ -2,6 +2,8 @@ module VGA_Top(
 	input clk,
 	input rst,
 	input stage,
+	input [81*4-1:0] board,
+	input [81-1:0] board_blank,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
@@ -42,6 +44,8 @@ module VGA_Top(
 		.v_cnt(v_cnt),
 		.clka(clk_25MHz),
 		.stage(stage),
+		.board_blank(board_blank),
+		.board(board),
 		.pixel(pixel_out)
 	);
 
