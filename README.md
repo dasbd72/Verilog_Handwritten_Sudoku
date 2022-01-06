@@ -6,15 +6,26 @@
 
 ## Memory Usage (tot : 2 _ 1024 _ 1024 = 2097152)
 
-- Picture_Menu : 1 \*  76800   = 76800
-- Picture_Game : 12 \* 76800   = 921600
-- Pixel_Number : 10 \* (52*52) = 27040
+- Picture_Menu : 1 \* 76800 = 76800
+- Picture_Game : 12 \* 76800 = 921600
+- Pixel_Number : 10 \* (52\*52) = 27040
 
 ## Dependency
 
 - Top.v
   - Sudoku.v
+  - game/SudokuGenerator.v
   - mouse/Mouse.v
     - mouse/MouseCtl.vhd
       - mouse/Ps2Interface.vhd
     - mouse/MouseDisplay.vhd
+  - mouse/MouseMenu.v
+  - mouse/MouseDraw.v
+  - utilities/LSFR.v
+  - VGA/VGA_Top.v
+  - chip2chip/P1Controller.v
+  - chip2chip/P2Controller.v
+
+## Reference
+
+[Puzzle Dataset](https://www.kaggle.com/radcliffe/3-million-sudoku-puzzles-with-ratings)

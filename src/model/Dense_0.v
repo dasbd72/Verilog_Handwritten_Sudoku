@@ -2,7 +2,7 @@
     clk : posedge clock signal
     rst : posedge reset signal
     start : req 1 cycle signal
-    layer_input : req 64 cycle
+    layer_input : req 784 cycle
     layer_0 : last until next start signal
     finish : last 1 cycle
  */
@@ -26,14 +26,13 @@ module Dense_0(
     localparam SFIN = 3'd4;
     reg [2:0] state, next_state;
 
-    // row * WIDTH + col
     reg  [16 - 1:0]     row, next_row;
     reg  [16*64 - 1:0]  next_layer_0;
     reg                 next_finish;
     wire [16 - 1:0]     curr_input_digit;
 
     assign curr_input_digit = {15'b0,layer_input[row]};
-
+    /* ------------------------------------Sequential------------------------------------- */
     always @(posedge clk ) begin
         if(rst) begin
             state <= SWAIT;
@@ -47,7 +46,7 @@ module Dense_0(
             finish <= next_finish;
         end
     end
-    // state
+    /* ------------------------------------State Combinational------------------------------------- */
     always @(*) begin
         case (state)
             SWAIT: begin
@@ -63,7 +62,7 @@ module Dense_0(
             default: next_state = SWAIT;
         endcase
     end
-    // row, col
+    /* ------------------------------------Other Combinationals------------------------------------- */
     always @(*) begin
         case (state)
             SDOT: next_row = row + 16'b1;
@@ -77,7 +76,7 @@ module Dense_0(
             default: next_finish = 1'b0;
         endcase
     end
-    // layer_0
+    /* ------------------------------------Layer Calculation------------------------------------- */
     always @(*) begin
         case (state)
             SWAIT: begin
@@ -282,12 +281,8 @@ module Dense_0(
                 next_layer_0[1007-:16] = (layer_0[1007] ? 16'b0 : layer_0[1007-:16]);
                 next_layer_0[1023-:16] = (layer_0[1023] ? 16'b0 : layer_0[1023-:16]);
             end
-            SFIN: begin
-                next_layer_0 = layer_0;
-            end
-            default: begin
-                next_layer_0 = layer_0;
-            end
+            SFIN: next_layer_0 = layer_0;
+            default: next_layer_0 = layer_0;
         endcase
     end
 endmodule

@@ -1,5 +1,5 @@
 `timescale 1ps/1ps
-module Clock_Divider #(
+module ClockDivider #(
     parameter length = 4
     ) (
     input wire clk,

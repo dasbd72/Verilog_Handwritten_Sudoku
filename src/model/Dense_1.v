@@ -25,16 +25,13 @@ module Dense_1(
     localparam SFIN = 3'd3;
     reg [2:0] state, next_state;
 
-    // row * WIDTH + col
     reg  [16 - 1:0]     row, next_row;
     reg  [32*10 - 1:0]  next_layer_1;
     reg                 next_finish;
     wire [32 - 1:0]     curr_input_digit;
     reg  [32*10 - 1:0]  inp_mult_ker;
 
-    // layer_0[(row+1)*16-1-:16]
-    assign curr_input_digit = {{16{layer_0[(row+1)*16-1]}}, layer_0[(row+1)*16-1-:16]};
-
+    /* ------------------------------------Sequential------------------------------------- */
     always @(posedge clk ) begin
         if(rst) begin
             state <= SWAIT;
@@ -48,7 +45,7 @@ module Dense_1(
             finish <= next_finish;
         end
     end
-    // state
+    /* ------------------------------------State Combinational------------------------------------- */
     always @(*) begin
         case (state)
             SWAIT: begin
@@ -63,7 +60,7 @@ module Dense_1(
             default: next_state = SWAIT;
         endcase
     end
-    // row, col
+    /* ------------------------------------Other Combinational------------------------------------- */
     always @(*) begin
         case (state)
             SDOT: next_row = row + 16'b1;
@@ -77,7 +74,8 @@ module Dense_1(
             default: next_finish = 1'b0;
         endcase
     end
-    // layer_1
+    /* ------------------------------------Layer Calculation------------------------------------- */
+    assign curr_input_digit = {{16{layer_0[(row+1)*16-1]}}, layer_0[(row+1)*16-1-:16]};
     always @(*) begin
         inp_mult_ker[31-:32]  = (curr_input_digit * kernel_1[(row*10+0+1)*32-1-:32]);
         inp_mult_ker[63-:32]  = (curr_input_digit * kernel_1[(row*10+1+1)*32-1-:32]);
