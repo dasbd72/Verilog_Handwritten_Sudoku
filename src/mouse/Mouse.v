@@ -14,7 +14,7 @@ module Mouse(
     output [3 : 0] mouse_cursor_blue,
     inout PS2_CLK,
     inout PS2_DATA
-);
+    );
 
     wire [3:0] MOUSE_Z_POS;
     
