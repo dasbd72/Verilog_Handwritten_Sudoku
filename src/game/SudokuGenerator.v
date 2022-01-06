@@ -4,12 +4,16 @@ module SudokuGenerator #(
     parameter bit = 4
     ) (
     input [15:0] random,
-    output reg [81*4-1:0] board
+    output reg [81*4-1:0] board,
+    output wire [81-1:0]  board_blank
     );
     
-    // localparam EASY = 2'd0;
-    // localparam NORM = 2'd1;
-    // localparam HARD = 2'd2;
+    genvar i;
+    generate
+        for(i = 0; i < 81; i = i + 1) begin
+            assign board_blank = board[(i+1)*bit-1-:bit] == 4'd0;
+        end
+    endgenerate
 
     always @(*) begin
         case (random[7:0])
