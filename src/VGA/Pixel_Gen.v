@@ -56,7 +56,7 @@ module Pixel_Gen (h_cnt, v_cnt, clka, stage, board_blank, board, pixel);
 				if (board_blank[row*9+col]) begin
 					pixel = 12'h000;
 				end else begin
-					pixel = 12'h500;
+					pixel = 12'he00;
 				end
 			end else begin
 				pixel = pixel_game;
@@ -164,7 +164,7 @@ endmodule
 
 module Cnt_to_Row_Col (cnt, out);
 	input [9:0] cnt;
-	output [3:0] out;
+	output reg [3:0] out;
 
 	always @(*) begin
 		if (cnt <= 51) begin

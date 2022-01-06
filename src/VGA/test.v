@@ -29,8 +29,9 @@ module test (
 
     wire [9*9*4-1:0] board;
     wire [9*9*4-1:0] init_board;
+    wire [81-1:0] init_board_blank;
     wire [81-1:0] board_blank;
-    reg [15:0] random;
+    wire [15:0] random;
 
     VGA_Top vga_top_inst(
         .clk(clk),
@@ -56,7 +57,7 @@ module test (
     SudokuGenerator sudokugen_inst(
         .random(random),
         .board(init_board),
-        .board_blank(board_blank)
+        .board_blank(init_board_blank)
     );
 
     Sudoku_Solver SS_inst(
@@ -68,8 +69,9 @@ module test (
         .col(col), 
         .data(in_data), 
         .init_board(init_board), 
-        .board_blank(board_blank), 
+        .init_board_blank(init_board_blank), 
         .board(board), 
+        .board_blank(board_blank),
         .valid(valid)
     );
     

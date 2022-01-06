@@ -7,9 +7,10 @@ module Sudoku_Solver (
     input [3:0] col,
     input [3:0] data,
     input [81*4-1:0] init_board,
-    input [81-1:0]   board_blank,
+    input [81-1:0]   init_board_blank,
     output reg [81*4-1:0] board,
-    output reg valid
+    output reg [81-1:0] board_blank,
+    output valid
     );
     
     parameter SIZE = 81*4;
@@ -24,6 +25,7 @@ module Sudoku_Solver (
     // ==========================
     // Check the sudoku is valid
     // ==========================
+    assign valid = (row_valid == 9'b111111111) & (col_valid == 9'b111111111) & (blk_valid == 9'b111111111);
     // ------------- Row ------------- 
     wire [0:8] row_valid;
     Check_Valid CV_row0(row_valid[0], board[SIZE-1-:4], board[SIZE-5-:4], board[SIZE-9-:4], board[SIZE-13-:4], 
@@ -84,8 +86,7 @@ module Sudoku_Solver (
                         board[SIZE-269-:4], board[SIZE-273-:4], board[SIZE-301-:4], board[SIZE-305-:4], board[SIZE-309-:4]);
     Check_Valid CV_blk8(blk_valid[8], board[SIZE-241-:4], board[SIZE-245-:4], board[SIZE-249-:4], board[SIZE-277-:4], 
                         board[SIZE-281-:4], board[SIZE-285-:4], board[SIZE-313-:4], board[SIZE-317-:4], board[SIZE-321-:4]);
-    // ------------- Board ------------- 
-    wire board_valid = (row_valid == 9'b111111111) & (col_valid == 9'b111111111) & (blk_valid == 9'b111111111);
+
 
     // ==========================
     // Clock update
@@ -93,10 +94,13 @@ module Sudoku_Solver (
     always @(posedge clk) begin
         if (reset) begin
             board <= 0;
+            board_blank <= 0;
         end else if (start) begin 
             board <= init_board;
+            board_blank <= init_board_blank;
         end else begin    
             board[(row_next*9+col_next)*4+3-:4] <= data_next;
+            board_blank <= board_blank;
         end
     end
 
@@ -110,7 +114,7 @@ module Sudoku_Solver (
             col_next = col;
         end else begin
             row_next = row_next;
-            col_next =col_next;
+            col_next = col_next;
             data_next = board[(row_next*9+col_next)*4+3-:4];
         end
     end

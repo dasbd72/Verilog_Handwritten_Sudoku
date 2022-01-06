@@ -11,7 +11,7 @@ module SudokuGenerator #(
     genvar i;
     generate
         for(i = 0; i < 81; i = i + 1) begin
-            assign board_blank = board[(i+1)*bit-1-:bit] == 4'd0;
+            assign board_blank[i] = board[(i+1)*bit-1-:bit] == 4'd0;
         end
     endgenerate
 
