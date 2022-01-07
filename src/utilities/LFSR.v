@@ -13,7 +13,7 @@ module LFSR(
         if(rst) begin
             out <= 16'hACE1;
         end else begin
-            out <= {out[15-:15], feedback};
+            out <= {out[14-:15], feedback};
         end
     end
 endmodule
