@@ -11,7 +11,7 @@ module LFSR(
 
     always @(posedge clk) begin
         if(rst) begin
-            out <= 16'hACE1;
+            out <= 16'hBEEF;
         end else begin
             out <= {out[14-:15], feedback};
         end
