@@ -33,7 +33,7 @@ module test (
     wire [81-1:0] board_blank;
     wire [15:0] random;
 
-    VGA_Top vga_top_inst(
+    Vga_Top vga_top_inst(
         .clk(clk),
         .rst(op_reset),
         .stage(stage),
@@ -60,7 +60,7 @@ module test (
         .board_blank(init_board_blank)
     );
 
-    Sudoku_Solver SS_inst(
+    Sudoku_Solver sudoku_solver_inst(
         .clk(clk), 
         .reset(op_reset), 
         .start(op_start), 
@@ -74,36 +74,17 @@ module test (
         .board_blank(board_blank),
         .valid(valid)
     );
-    
-endmodule
 
-module Debounce(clk, in, out);
-    input clk, in;
-    output out;
+    // wire [52*52-1:0] track_input;
+    // wire [3:0] predicted_number;
+    // wire finish;
 
-    reg [3:0] DFF;
-
-    always @(posedge clk) begin
-        DFF[3:1] <= DFF[2:0];
-        DFF[0] <= in;
-    end
-    assign out = ((DFF == 4'b1111) ? 1'b1 : 1'b0);
-endmodule
-
-module OnePulse (
-	input wire clock,
-	input wire signal,
-	output reg signal_single_pulse
-	);
-	
-	reg signal_delay;
-
-	always @(posedge clock) begin
-		if (signal == 1'b1 & signal_delay == 1'b0)
-		  signal_single_pulse <= 1'b1;
-		else
-		  signal_single_pulse <= 1'b0;
-
-		signal_delay <= signal;
-	end
+    // Predict m_predict (
+    //     .clk(clk),
+    //     .rst(op_reset),
+    //     .start(op_start),
+    //     .track_input(track_input),
+    //     .predicted_number(predicted_number),
+    //     .finish(finish)
+    // );
 endmodule

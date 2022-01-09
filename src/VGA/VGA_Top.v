@@ -1,4 +1,4 @@
-module VGA_Top(
+module Vga_Top(
 	input clk,
 	input rst,
 	input stage,
@@ -13,7 +13,7 @@ module VGA_Top(
 	inout PS2_DATA
 	);
 
-	wire clk_25MHz, clk_22;
+	wire clk_vga;
 	wire valid;
 	wire [9:0] h_cnt;  // 640
 	wire [9:0] v_cnt;  // 480
@@ -33,24 +33,23 @@ module VGA_Top(
 	assign {vgaRed, vgaGreen, vgaBlue} = (valid) ? pixel : 12'h0;
 	assign pixel = (enable_mouse_display) ? mouse_pixel : pixel_out;
 
-	clock_divisor clk_wiz_0_inst(
+	Clock_VGA clock_vga_inst(
 		.clk(clk),
-		.clk1(clk_25MHz),
-		.clk22(clk_22)
+		.clk_vga(clk_vga)
 	);
 
 	Pixel_Gen pixel_gen_inst(
 		.h_cnt(h_cnt),
 		.v_cnt(v_cnt),
-		.clka(clk_25MHz),
+		.clka(clk_vga),
 		.stage(stage),
 		.board_blank(board_blank),
 		.board(board),
 		.pixel(pixel_out)
 	);
 
-	Vga_Controller vga_inst(
-		.pclk(clk_25MHz),
+	Vga_Controller vga_controller_inst(
+		.pclk(clk_vga),
 		.reset(rst),
 		.hsync(hsync),
 		.vsync(vsync),

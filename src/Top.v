@@ -22,7 +22,7 @@ module Top #(
     );
 
     localparam SMENU = 4'd0;
-    localparam SMENU = 4'd0;
+    localparam SGAME = 4'd1;
     reg [3:0] state, next_state;
     
 endmodule

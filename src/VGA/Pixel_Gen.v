@@ -38,8 +38,8 @@ module Pixel_Gen (h_cnt, v_cnt, clka, stage, board_blank, board, pixel);
     // ==========================
 	wire [3:0] row;
 	wire [3:0] col;
-	Cnt_to_Row_Col CtR(v_cnt, row);
-	Cnt_to_Row_Col CtC(h_cnt, col);
+	Cnt_to_Row_Col CtR_inst(v_cnt, row);
+	Cnt_to_Row_Col CtC_inst(h_cnt, col);
 
     // --------------- Address assign --------------- // 
     assign pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
