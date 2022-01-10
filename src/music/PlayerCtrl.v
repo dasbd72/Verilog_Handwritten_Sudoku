@@ -5,11 +5,11 @@ module PlayerCtrl (
 	);
 	parameter BEATLEAGTH = 29;
 
-	always @(posedge clk) begin
+	always @(posedge clk, posedge reset) begin
 		if (reset)
-			ibeat <= 0;
+			ibeat <= 1;
 		else if (ibeat == BEATLEAGTH) 
-            ibeat <= 0;
+            ibeat <= 1;
         else 
             ibeat <= ibeat + 1;
 	end

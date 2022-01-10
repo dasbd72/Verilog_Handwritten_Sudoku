@@ -14,7 +14,11 @@ module test (
 	inout PS2_DATA,
     output valid,
     input [3:0] row,
-    input [3:0] col
+    input [3:0] col,
+
+    output pmod_1,
+	output pmod_2,
+	output pmod_4
     );
 
     wire db_reset, db_enter, db_start;
@@ -26,26 +30,35 @@ module test (
     OnePulse op1(clk, db_start, op_start);
     OnePulse op2(clk, db_enter, op_enter);
 
-
     wire [9*9*4-1:0] board;
     wire [9*9*4-1:0] init_board;
     wire [81-1:0] init_board_blank;
     wire [81-1:0] board_blank;
     wire [15:0] random;
+    wire [9:0] h_cnt;
+    wire [9:0] v_cnt;
+
+    wire enable_mouse_display;
+	wire [9:0] MOUSE_X_POS , MOUSE_Y_POS;
+    wire MOUSE_LEFT , MOUSE_MIDDLE , MOUSE_RIGHT , MOUSE_NEW_EVENT;
+    wire [3:0] mouse_cursor_red , mouse_cursor_green , mouse_cursor_blue;
+    wire [11:0] mouse_pixel = {mouse_cursor_red, mouse_cursor_green, mouse_cursor_blue};
 
     Vga_Top vga_top_inst(
         .clk(clk),
         .rst(op_reset),
         .stage(stage),
+        .enable_mouse_display(enable_mouse_display),
+        .mouse_pixel(mouse_pixel),
         .board(board),
         .board_blank(board_blank),
         .vgaRed(vgaRed),
         .vgaGreen(vgaGreen),
         .vgaBlue(vgaBlue),
+        .h_cnt(h_cnt),
+        .v_cnt(v_cnt),
         .hsync(hsync),
-        .vsync(vsync),
-        .PS2_CLK(PS2_CLK),
-        .PS2_DATA(PS2_DATA)
+        .vsync(vsync)
     );
 
     LFSR lfsr_inst(
@@ -75,16 +88,30 @@ module test (
         .valid(valid)
     );
 
-    // wire [52*52-1:0] track_input;
-    // wire [3:0] predicted_number;
-    // wire finish;
+    Mouse mouse_inst(
+		.clk(clk),
+		.h_cntr_reg(h_cnt),
+		.v_cntr_reg(v_cnt),
+		.enable_mouse_display(enable_mouse_display),
+		.MOUSE_X_POS(MOUSE_X_POS),
+		.MOUSE_Y_POS(MOUSE_Y_POS),
+		.MOUSE_LEFT(MOUSE_LEFT),
+		.MOUSE_MIDDLE(MOUSE_MIDDLE),
+		.MOUSE_RIGHT(MOUSE_RIGHT),
+		.MOUSE_NEW_EVENT(MOUSE_NEW_EVENT),
+		.mouse_cursor_red(mouse_cursor_red),
+		.mouse_cursor_green(mouse_cursor_green),
+		.mouse_cursor_blue(mouse_cursor_blue),
+		.PS2_CLK(PS2_CLK),
+		.PS2_DATA(PS2_DATA)
+	);
 
-    // Predict m_predict (
-    //     .clk(clk),
-    //     .rst(op_reset),
-    //     .start(op_start),
-    //     .track_input(track_input),
-    //     .predicted_number(predicted_number),
-    //     .finish(finish)
-    // );
+    Music_Top music_inst(
+        .clk(clk),
+        .reset(op_reset),
+        .pmod_1(pmod_1),
+        .pmod_2(pmod_2),
+        .pmod_4(pmod_4)
+    );
+
 endmodule

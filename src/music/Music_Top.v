@@ -6,7 +6,7 @@ module Music_Top (
 	output pmod_4
     );
 
-	wire [31:0] BEAT_FREQ;
+	wire [31:0] BEAT_FREQ = 32'd8;
 
 	Audio audio_inst(
 		.clk(clk),
