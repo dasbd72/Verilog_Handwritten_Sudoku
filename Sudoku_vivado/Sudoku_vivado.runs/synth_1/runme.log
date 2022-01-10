@@ -1,0 +1,98 @@
+
+*** Running vivado
+    with args -log Sudoku_Solver.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source Sudoku_Solver.tcl
+
+
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source Sudoku_Solver.tcl -notrace
+Command: synth_design -top Sudoku_Solver -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 7496
+WARNING: [Synth 8-6901] identifier 'row_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+WARNING: [Synth 8-6901] identifier 'col_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+WARNING: [Synth 8-6901] identifier 'blk_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:07 ; elapsed = 00:00:07 . Memory (MB): peak = 1017.336 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'Sudoku_Solver' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:1]
+	Parameter SIZE bound to: 324 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'Check_Valid' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:124]
+INFO: [Synth 8-6155] done synthesizing module 'Check_Valid' (1#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:124]
+INFO: [Synth 8-6155] done synthesizing module 'Sudoku_Solver' (2#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:1]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 1017.336 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1017.336 ; gain = 0.000
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1017.336 ; gain = 0.000
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.085 . Memory (MB): peak = 1017.336 ; gain = 0.000
+
+*** Running vivado
+    with args -log TOP.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source TOP.tcl
+
+
+
+****** Vivado v2020.2 (64-bit)
+  **** SW Build 3064766 on Wed Nov 18 09:12:45 MST 2020
+  **** IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+    ** Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+
+source TOP.tcl -notrace
+Command: synth_design -top TOP -part xc7a35tcpg236-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcpg236-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 11516
+WARNING: [Synth 8-6901] identifier 'row_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+WARNING: [Synth 8-6901] identifier 'col_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+WARNING: [Synth 8-6901] identifier 'blk_valid' is used before its declaration [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/game/Sudoku.v:28]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1015.203 ; gain = 0.000
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'TOP' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/Top.v:1]
+INFO: [Synth 8-6157] synthesizing module 'Debounce' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Debounce.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'Debounce' (1#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Debounce.v:1]
+INFO: [Synth 8-6157] synthesizing module 'OnePulse' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/OnePulse.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'OnePulse' (2#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/OnePulse.v:1]
+INFO: [Synth 8-6157] synthesizing module 'Vga_Top' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Vga_Top.v:1]
+INFO: [Synth 8-6157] synthesizing module 'Clock_VGA' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Clock_Vga.v:1]
+INFO: [Synth 8-6155] done synthesizing module 'Clock_VGA' (3#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Clock_Vga.v:1]
+INFO: [Synth 8-6157] synthesizing module 'Pixel_Gen' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Pixel_Gen.v:1]
+	Parameter SIZE bound to: 52 - type: integer 
+	Parameter Menu bound to: 0 - type: integer 
+	Parameter Game bound to: 1 - type: integer 
+	Parameter blk_pos bound to: 90'b000000000000001101010001101010001010000100110101100100001011010100001001011101110110101100 
+INFO: [Synth 8-6157] synthesizing module 'Cnt_to_Row_Col' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Pixel_Gen.v:165]
+INFO: [Synth 8-6155] done synthesizing module 'Cnt_to_Row_Col' (4#1) [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Pixel_Gen.v:165]
+ERROR: [Synth 8-439] module 'Menu_Mem_Gen' not found [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Pixel_Gen.v:67]
+ERROR: [Synth 8-6156] failed synthesizing module 'Pixel_Gen' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Pixel_Gen.v:1]
+ERROR: [Synth 8-6156] failed synthesizing module 'Vga_Top' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Vga_Top.v:1]
+ERROR: [Synth 8-6156] failed synthesizing module 'TOP' [C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/Top.v:1]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1015.203 ; gain = 0.000
+---------------------------------------------------------------------------------
+RTL Elaboration failed
+INFO: [Common 17-83] Releasing license: Synthesis
+17 Infos, 3 Warnings, 0 Critical Warnings and 5 Errors encountered.
+synth_design failed
+ERROR: [Common 17-69] Command failed: Synthesis failed - please see the console or run log file for details
+INFO: [Common 17-206] Exiting Vivado at Tue Jan 11 02:52:29 2022...
