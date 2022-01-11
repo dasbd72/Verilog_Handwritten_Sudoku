@@ -36,7 +36,7 @@ module Vga_Top(
 		.stage(stage),
 		.board_blank(board_blank),
 		.board(board),
-		.pixel(pixel_out)
+		.pixel_out(pixel_out)
 	);
 
 	Vga_Controller vga_controller_inst(

@@ -1,0 +1,2 @@
+Num5_Mem_Gen.v,verilog,xil_defaultlib,../../../../Sudoku_vivado.gen/sources_1/ip/Num5_Mem_Gen/sim/Num5_Mem_Gen.v,
+glbl.v,Verilog,xil_defaultlib,glbl.v

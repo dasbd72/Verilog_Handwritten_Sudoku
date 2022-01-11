@@ -133,9 +133,21 @@ OPTRACE "set parameters" START { }
   set_property parent.project_path C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.xpr [current_project]
   set_property ip_output_repo C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.cache/ip [current_project]
   set_property ip_cache_permissions {read write} [current_project]
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 OPTRACE "set parameters" END { }
 OPTRACE "add files" START { }
   add_files -quiet C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.runs/synth_1/TOP.dcp
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num1_Mem_Gen/Num1_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num2_Mem_Gen/Num2_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num3_Mem_Gen/Num3_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num4_Mem_Gen/Num4_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num5_Mem_Gen/Num5_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num6_Mem_Gen/Num6_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num7_Mem_Gen/Num7_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num8_Mem_Gen/Num8_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num9_Mem_Gen/Num9_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Menu_Mem_Gen/Menu_Mem_Gen.xci
+  read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Game_Mem_Gen/Game_Mem_Gen.xci
 OPTRACE "read constraints: implementation" START { }
   read_xdc C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/Master.xdc
 OPTRACE "read constraints: implementation" END { }
@@ -302,6 +314,7 @@ set rc [catch {
   create_msg_db write_bitstream.pb
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }
+  set_property XPM_LIBRARIES XPM_MEMORY [current_project]
   catch { write_mem_info -force -no_partial_mmi TOP.mmi }
 OPTRACE "write_bitstream setup" END { }
 OPTRACE "write_bitstream" START { }

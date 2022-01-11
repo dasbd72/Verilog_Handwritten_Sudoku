@@ -77,19 +77,35 @@ create_project -in_memory -part xc7a35tcpg236-1
 set_param project.singleFileAddWarning.threshold 0
 set_param project.compositeFile.enableAutoGeneration 0
 set_param synth.vivado.isSynthRun true
+set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
 set_property webtalk.parent_dir C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.cache/wt [current_project]
 set_property parent.project_path C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.xpr [current_project]
+set_property XPM_LIBRARIES XPM_MEMORY [current_project]
 set_property default_lib xil_defaultlib [current_project]
 set_property target_language Verilog [current_project]
 set_property ip_output_repo c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.cache/ip [current_project]
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/0.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/1.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/2.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/3.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/4.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/5.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/6.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/7.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/8.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/number/9.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/photo/menu.coe
+add_files c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/photo/game.coe
 read_verilog -library xil_defaultlib {
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/music/Audio.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Clock_Vga.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/Debounce.v
+  C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Game_Pixel_Gen.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/utilities/LFSR.v
+  C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/VGA/Menu_Pixel_Gen.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/mouse/Mouse.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/music/Music.v
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/music/Music_Top.v
@@ -108,6 +124,39 @@ read_vhdl -library xil_defaultlib {
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/mouse/MouseDisplay.vhd
   C:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/src/mouse/Ps2Interface.vhd
 }
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num1_Mem_Gen/Num1_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num1_Mem_Gen/Num1_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num2_Mem_Gen/Num2_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num2_Mem_Gen/Num2_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num3_Mem_Gen/Num3_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num3_Mem_Gen/Num3_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num4_Mem_Gen/Num4_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num4_Mem_Gen/Num4_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num5_Mem_Gen/Num5_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num5_Mem_Gen/Num5_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num6_Mem_Gen/Num6_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num6_Mem_Gen/Num6_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num7_Mem_Gen/Num7_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num7_Mem_Gen/Num7_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num8_Mem_Gen/Num8_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num8_Mem_Gen/Num8_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Num9_Mem_Gen/Num9_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Num9_Mem_Gen/Num9_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Menu_Mem_Gen/Menu_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Menu_Mem_Gen/Menu_Mem_Gen_ooc.xdc]
+
+read_ip -quiet c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.srcs/sources_1/ip/Game_Mem_Gen/Game_Mem_Gen.xci
+set_property used_in_implementation false [get_files -all c:/Users/yuxun/Desktop/LDL_FinalProject_Sudoku/Sudoku_vivado/Sudoku_vivado.gen/sources_1/ip/Game_Mem_Gen/Game_Mem_Gen_ooc.xdc]
+
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
 # stitched into the results of this synthesis run. Any black boxes in the
