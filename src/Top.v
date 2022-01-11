@@ -44,11 +44,22 @@ module TOP (
     wire [3:0] mouse_cursor_red , mouse_cursor_green , mouse_cursor_blue;
     wire [11:0] mouse_pixel = {mouse_cursor_red, mouse_cursor_green, mouse_cursor_blue};
 
+    wire start;
+    wire [2703:0] track;
+    wire [3:0] block_x, block_y;
+    wire [9:0] block_x_pos, block_y_pos;
+    wire enable_track_display_out;
+    wire [3:0] red_out, green_out, blue_out;
+
+    // wire [3:0] predicted_number;
+    // wire finish;
+
     Vga_Top vga_top_inst(
         .clk(clk),
         .rst(op_reset),
         .stage(stage),
         .enable_mouse_display(enable_mouse_display),
+        .enable_track_display_out(enable_track_display_out),
         .mouse_pixel(mouse_pixel),
         .board(board),
         .board_blank(board_blank),
@@ -77,9 +88,9 @@ module TOP (
         .clk(clk), 
         .reset(op_reset), 
         .start(op_start), 
-        .read(op_enter), 
-        .row(row), 
-        .col(col), 
+        .read(start), 
+        .row(block_y), 
+        .col(block_x), 
         .data(in_data), 
         .init_board(init_board), 
         .init_board_blank(init_board_blank), 
@@ -105,6 +116,42 @@ module TOP (
 		.PS2_CLK(PS2_CLK),
 		.PS2_DATA(PS2_DATA)
 	);
+
+    MouseDraw mousedraw_inst(
+        .clk(clk),
+        .rst(op_reset),
+        .MOUSE_X_POS(MOUSE_X_POS),
+        .MOUSE_Y_POS(MOUSE_Y_POS),
+        .MOUSE_LEFT(MOUSE_LEFT),
+        .valid(start),
+        .track(track),
+        .block_x(block_x),
+        .block_y(block_y),
+        .block_x_pos(block_x_pos),
+        .block_y_pos(block_y_pos)
+    );
+
+    MouseTrackDisplay mousetrackdisplay_inst(
+        .clk(clk),
+        .block_x_pos(block_x_pos),
+        .block_y_pos(block_y_pos),
+        .track(track),
+        .hcount(h_cnt),
+        .vcount(v_cnt),
+        .enable_track_display_out(enable_track_display_out),
+        .red_out(red_out),
+        .green_out(green_out),
+        .blue_out(blue_out)
+    );
+
+    // Predict predict_inst(
+    //     .clk(clk),
+    //     .rst(op_reset),
+    //     .start(start),
+    //     .track_input(track),
+    //     .predicted_number(predicted_number),
+    //     .finish(finish)
+    // );
 
     Music_Top music_inst(
         .clk(clk),

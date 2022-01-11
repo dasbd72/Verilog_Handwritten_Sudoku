@@ -17,6 +17,14 @@ module Game_Pixel_Gen(
         12'h106
     };
 
+    // ==========================
+    // Row and column
+    // ==========================
+	wire [3:0] row;
+	wire [3:0] col;
+	Cnt_to_Row_Col CtR_inst(v_cnt, row);
+	Cnt_to_Row_Col CtC_inst(h_cnt, col);
+	
     // --------------- Enable number signals --------------- // 
 	wire enable_num_display = (h_cnt < 480) & board[(row*9+col)*4+3-:4] != 0;
     // ==========================
@@ -36,13 +44,6 @@ module Game_Pixel_Gen(
     // ==========================
     wire [11:0] pixel_game;
 
-    // ==========================
-    // Row and column
-    // ==========================
-	wire [3:0] row;
-	wire [3:0] col;
-	Cnt_to_Row_Col CtR_inst(v_cnt, row);
-	Cnt_to_Row_Col CtC_inst(h_cnt, col);
 
     always @(*) begin
 		if (num_mem[board[(row*9+col)*4+3-:4]]) begin

@@ -3,6 +3,7 @@ module Vga_Top(
 	input rst,
 	input stage,
 	input enable_mouse_display,
+	input enable_track_display_out,
 	input [11:0] mouse_pixel,
 	input [81*4-1:0] board,
 	input [81-1:0] board_blank,
@@ -18,11 +19,22 @@ module Vga_Top(
 	wire clk_vga;
 	wire valid;
 	
-	wire [11:0] pixel;
+	reg [11:0] pixel;
 	wire [11:0] pixel_out;
 	
 	assign {vgaRed, vgaGreen, vgaBlue} = (valid) ? pixel : 12'h0;
-	assign pixel = (enable_mouse_display) ? mouse_pixel : pixel_out;
+
+	always @(*) begin
+		if (enable_mouse_display) begin
+			pixel = mouse_pixel;
+		end else if (enable_track_display_out) begin
+			pixel = 12'h000;
+		end else begin
+			pixel = pixel_out;
+		end
+	end
+
+	// assign pixel = (enable_mouse_display) ? mouse_pixel : pixel_out;
 
 	Clock_VGA clock_vga_inst(
 		.clk(clk),
