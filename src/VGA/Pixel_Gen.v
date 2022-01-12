@@ -3,8 +3,10 @@ module Pixel_Gen (
     input [9:0] h_cnt,
 	input [9:0] v_cnt, 	
     input [1:0] state,
+	input connected,
 	input MOUSE_LEFT,
 	input mouse_on_start_button,
+	input mouse_on_connect_button,
 	input mouse_on_return_button,
 	input [9*9-1:0] board_blank,
 	input [9*9*4-1:0] board,
@@ -41,8 +43,10 @@ module Pixel_Gen (
 		.clka(clka),
 		.h_cnt(h_cnt),
 		.v_cnt(v_cnt),
+		.connected(connected),
 		.MOUSE_LEFT(MOUSE_LEFT),
 		.mouse_on_start_button(mouse_on_start_button),
+		.mouse_on_connect_button(mouse_on_connect_button),
 		.pixel_menu_out(pixel_menu_out)	
 	);
 

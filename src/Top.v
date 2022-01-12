@@ -35,12 +35,15 @@ module TOP (
     wire [11:0] mouse_pixel = {mouse_cursor_red, mouse_cursor_green, mouse_cursor_blue};
 
     wire start;
+    wire connected = 1'b0;
+    wire game_finish;
     reg game_init;
     wire [2703:0] track;
     wire [3:0] block_x, block_y;
     wire [9:0] block_x_pos, block_y_pos;
     wire enable_track_display_out;
     wire mouse_on_start_button;
+    wire mouse_on_connect_button;
     wire mouse_on_return_button;
     wire [3:0] red_out, green_out, blue_out;
 
@@ -70,7 +73,7 @@ module TOP (
                 game_init = 1;
             end
             SGAME: begin 
-                if (valid) begin
+                if (game_finish) begin
                     State_next = SOVER;
                 end else begin
                     State_next = SGAME;
@@ -103,6 +106,7 @@ module TOP (
         .MOUSE_X_POS(MOUSE_X_POS),
         .MOUSE_Y_POS(MOUSE_Y_POS),
         .mouse_on_start_button(mouse_on_start_button),
+        .mouse_on_connect_button(mouse_on_connect_button),
         .mouse_on_return_button(mouse_on_return_button)
     );
 
@@ -110,10 +114,12 @@ module TOP (
         .clka(clka),
         .rst(op_reset),
         .state(State),
+        .connected(connected),
         .MOUSE_LEFT(MOUSE_LEFT),
         .enable_mouse_display(enable_mouse_display),
         .enable_track_display_out(enable_track_display_out),
         .mouse_on_start_button(mouse_on_start_button),
+        .mouse_on_connect_button(mouse_on_connect_button),
         .mouse_on_return_button(mouse_on_return_button),
         .mouse_pixel(mouse_pixel),
         .board(board),
@@ -151,7 +157,7 @@ module TOP (
         .init_board_blank(init_board_blank), 
         .board(board), 
         .board_blank(board_blank),
-        .valid(valid)
+        .valid(game_finish)
     );
 
     Mouse mouse_inst(
