@@ -15,7 +15,7 @@ module Menu_Pixel_Gen (
     parameter CLICK = 12'h3E2;
     parameter isCONNECT = 12'h567;
 
-    wire [18:0] pixel_background_addr = h_cnt + 640 * v_cnt;
+    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
     wire [1:0] menu_mem;
 
     always @(*) begin
