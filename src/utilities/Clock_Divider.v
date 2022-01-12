@@ -1,9 +1,12 @@
 `timescale 1ps/1ps
-module ClockDivider #(
+/* 
+    used for enable only
+ */
+module Clock_Divider #(
     parameter length = 4
     ) (
     input wire clk,
-    input wire rst_n,
+    input wire rst,
     output reg dclk
     );
     
@@ -12,7 +15,7 @@ module ClockDivider #(
 
     // Posedge Trigger
     always @(posedge clk) begin
-        if(~rst_n) begin
+        if(rst) begin
             cnt_cycle <= 32'b1;
             dclk <= 1'b0;
         end else begin
