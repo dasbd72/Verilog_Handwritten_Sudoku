@@ -1,11 +1,17 @@
 module TOP (
     input clk,
-	input btnU,
+	input btnU, 
     input [3:0] in_data,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
     output [15:0] LED,
+    input receive_connect,
+    input receive_start,
+    input receive_game_finish,
+    output send_connect,
+    output send_start,
+    output send_game_finish,
 	output hsync,
 	output vsync,
 	inout PS2_CLK,
@@ -20,6 +26,7 @@ module TOP (
     Debounce db0(clk, btnU, db_reset);
     OnePulse op0(clk, db_reset, op_reset);
 
+    wire clka;
     wire [9*9*4-1:0] board;
     wire [9*9*4-1:0] init_board;
     wire [81-1:0] init_board_blank;
@@ -28,35 +35,44 @@ module TOP (
     wire [9:0] h_cnt;
     wire [9:0] v_cnt;
 
-    wire clka;
+    wire [2703:0] track;
     wire enable_mouse_display;
+    wire enable_track_display_out;
 	wire [9:0] MOUSE_X_POS , MOUSE_Y_POS;
     wire MOUSE_LEFT , MOUSE_MIDDLE , MOUSE_RIGHT , MOUSE_NEW_EVENT;
     wire [3:0] mouse_cursor_red , mouse_cursor_green , mouse_cursor_blue;
     wire [11:0] mouse_pixel = {mouse_cursor_red, mouse_cursor_green, mouse_cursor_blue};
-
-    wire start;
-    wire connected = 1'b0;
-    wire game_init, game_finish;
-    wire [2703:0] track;
     wire [3:0] block_x, block_y;
     wire [9:0] block_x_pos, block_y_pos;
-    wire enable_track_display_out;
+    wire [3:0] red_out, green_out, blue_out;
+
+    wire start_read;
+    wire status; // Master:0 or slave:1
+    wire connected = receive_connect & send_connect;
+    wire game_init, send_game_finish;
     wire mouse_on_start_button;
     wire mouse_on_connect_button;
     wire mouse_on_return_button;
-    wire [3:0] red_out, green_out, blue_out;
 
     wire [1:0] State;
 
     Stage stage_inst(
         .clk(clk),
         .reset(op_reset),
-        .game_finish(game_finish),
+        .game_finish(send_game_finish),
         .MOUSE_LEFT(MOUSE_LEFT),
         .mouse_on_start_button(mouse_on_start_button),
+        .mouse_on_connect_button(mouse_on_connect_button),
         .mouse_on_return_button(mouse_on_return_button),
+        /* ======================= */
+        .receive_connect(receive_connect),
+        .receive_start(receive_start),
+        .receive_game_finish(receive_game_finish),
+        .send_connect(send_connect),
+        .send_start(send_start),
+        /* ======================= */
         .game_init(game_init),
+        .status(status),
         .State(State)
     );
 
@@ -120,7 +136,7 @@ module TOP (
         .clk(clk), 
         .reset(op_reset), 
         .start(game_init), 
-        .read(start), 
+        .read(start_read), 
         .data(in_data),
         .row(block_y), 
         .col(block_x), 
@@ -132,7 +148,7 @@ module TOP (
         .init_board_blank(init_board_blank), 
         .board(board), 
         .board_blank(board_blank),
-        .valid(game_finish)
+        .valid(send_game_finish)
     );
 
     Mouse mouse_inst(
@@ -159,7 +175,7 @@ module TOP (
         .MOUSE_X_POS(MOUSE_X_POS),
         .MOUSE_Y_POS(MOUSE_Y_POS),
         .MOUSE_LEFT(MOUSE_LEFT),
-        .valid(start),
+        .valid(start_read),
         .track(track),
         .block_x(block_x),
         .block_y(block_y),
@@ -179,15 +195,6 @@ module TOP (
         .green_out(green_out),
         .blue_out(blue_out)
     );
-
-    // Predict predict_inst(
-    //     .clk(clk),
-    //     .rst(op_reset),
-    //     .start(start),
-    //     .track_input(track),
-    //     .predicted_number(predicted_number),
-    //     .finish(finish)
-    // );
 
     Music_Top music_inst(
         .clk(clk),

@@ -47,7 +47,7 @@ create_clock -period 10.000 -name sys_clk_pin -waveform {0.000 5.000} -add [get_
 ## LEDs
 set_property PACKAGE_PIN U16 [get_ports {LED[0]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {LED[0]}]
-set_property PACKAGE_PIN U16 [get_ports {LED[1]}]
+set_property PACKAGE_PIN E19 [get_ports {LED[1]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {LED[1]}]
 set_property PACKAGE_PIN U19 [get_ports {LED[2]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {LED[2]}]
@@ -122,26 +122,26 @@ set_property IOSTANDARD LVCMOS33 [get_ports btnU]
 
 ##Pmod Header JA
 ##Sch name = JA1
-#set_property PACKAGE_PIN J1 [get_ports {JA[0]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[0]}]
+set_property PACKAGE_PIN J1 [get_ports receive_connect]
+set_property IOSTANDARD LVCMOS33 [get_ports receive_connect]
 ##Sch name = JA2
-#set_property PACKAGE_PIN L2 [get_ports {JA[1]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[1]}]
+set_property PACKAGE_PIN L2 [get_ports receive_start]
+set_property IOSTANDARD LVCMOS33 [get_ports receive_start]
 ##Sch name = JA3
-#set_property PACKAGE_PIN J2 [get_ports {JA[2]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[2]}]
+set_property PACKAGE_PIN J2 [get_ports receive_game_finish]
+set_property IOSTANDARD LVCMOS33 [get_ports receive_game_finish]
 ##Sch name = JA4
 #set_property PACKAGE_PIN G2 [get_ports {JA[3]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {JA[3]}]
 ##Sch name = JA7
-#set_property PACKAGE_PIN H1 [get_ports {JA[4]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[4]}]
+set_property PACKAGE_PIN H1 [get_ports send_connect]
+set_property IOSTANDARD LVCMOS33 [get_ports send_connect]
 ##Sch name = JA8
-#set_property PACKAGE_PIN K2 [get_ports {JA[5]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[5]}]
+set_property PACKAGE_PIN K2 [get_ports send_start]
+set_property IOSTANDARD LVCMOS33 [get_ports send_start]
 ##Sch name = JA9
-#set_property PACKAGE_PIN H2 [get_ports {JA[6]}]
-#set_property IOSTANDARD LVCMOS33 [get_ports {JA[6]}]
+set_property PACKAGE_PIN H2 [get_ports send_game_finish]
+set_property IOSTANDARD LVCMOS33 [get_ports send_game_finish]
 ##Sch name = JA10
 #set_property PACKAGE_PIN G3 [get_ports {JA[7]}]
 #set_property IOSTANDARD LVCMOS33 [get_ports {JA[7]}]
