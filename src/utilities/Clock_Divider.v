@@ -1,7 +1,3 @@
-`timescale 1ps/1ps
-/* 
-    used for enable only
- */
 module Clock_Divider #(
     parameter length = 4
     ) (

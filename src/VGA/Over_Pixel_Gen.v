@@ -17,8 +17,8 @@ module Over_Pixel_Gen (
 
     always @(*) begin
         case (over_mem)
-            0: pixel_over_out= WHITE;
-            1: pixel_over_out = BLACK;
+            0: pixel_over_out = BLACK;
+            1: pixel_over_out = WHITE;
             2: begin
                 if (mouse_on_return_button) begin
                     if (MOUSE_LEFT) begin

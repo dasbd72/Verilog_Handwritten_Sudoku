@@ -5,6 +5,7 @@ module TOP (
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
+    output [15:0] LED,
 	output hsync,
 	output vsync,
 	inout PS2_CLK,
@@ -36,8 +37,7 @@ module TOP (
 
     wire start;
     wire connected = 1'b0;
-    wire game_finish;
-    reg game_init;
+    wire game_init, game_finish;
     wire [2703:0] track;
     wire [3:0] block_x, block_y;
     wire [9:0] block_x_pos, block_y_pos;
@@ -47,54 +47,25 @@ module TOP (
     wire mouse_on_return_button;
     wire [3:0] red_out, green_out, blue_out;
 
-    wire op_mouse;
-    OnePulse op1(clk, !MOUSE_LEFT, op_mouse);
+    wire [1:0] State;
 
-    reg [1:0] State, State_next;
-    parameter [1:0] SMENU = 2'd0;
-    parameter [1:0] SGAME = 2'd1;
-    parameter [1:0] SOVER = 2'd2;
-    always @(posedge clk) begin
-        if (op_reset) begin
-            State <= SMENU;
-        end else begin
-            State <= State_next;
-        end
-    end
+    Stage stage_inst(
+        .clk(clk),
+        .reset(op_reset),
+        .game_finish(game_finish),
+        .MOUSE_LEFT(MOUSE_LEFT),
+        .mouse_on_start_button(mouse_on_start_button),
+        .mouse_on_return_button(mouse_on_return_button),
+        .game_init(game_init),
+        .State(State)
+    );
 
-    always @(*) begin
-        case (State)
-            SMENU: begin 
-                if (mouse_on_start_button && op_mouse) begin
-                    State_next = SGAME;
-                end else begin
-                    State_next = SMENU;
-                end
-                game_init = 1;
-            end
-            SGAME: begin 
-                if (game_finish) begin
-                    State_next = SOVER;
-                end else begin
-                    State_next = SGAME;
-                end
-                game_init = 0;
-            end
-            SOVER: begin 
-                if (mouse_on_return_button && op_mouse) begin
-                    State_next = SMENU;
-                end else begin
-                    State_next = SOVER;
-                end
-                game_init = 1;
-            end
-            default: begin
-                State_next = SMENU;
-                game_init = 1;
-            end
-        endcase
-    
-    end
+    LED_Controller ledcontroller_inst(
+        .clk(clk),
+        .rst(op_reset),
+        .State(State),
+        .LED(LED)
+    );
 
     Clock_VGA clock_vga_inst(
 		.clk(clk),
@@ -150,9 +121,13 @@ module TOP (
         .reset(op_reset), 
         .start(game_init), 
         .read(start), 
+        .data(in_data),
         .row(block_y), 
         .col(block_x), 
-        .data(in_data), 
+        .MOUSE_X_POS(MOUSE_X_POS),
+        .MOUSE_Y_POS(MOUSE_Y_POS),
+        .MOUSE_MIDDLE(MOUSE_MIDDLE),
+        .MOUSE_RIGHT(MOUSE_RIGHT), 
         .init_board(init_board), 
         .init_board_blank(init_board_blank), 
         .board(board), 

@@ -3,9 +3,13 @@ module Sudoku_Solver (
     input reset,
     input start,
     input read,
+    input [3:0] data,
     input [3:0] row,
     input [3:0] col,
-    input [3:0] data,
+    input [9:0] MOUSE_X_POS,
+    input [9:0] MOUSE_Y_POS,
+    input MOUSE_MIDDLE,
+    input MOUSE_RIGHT,
     input [81*4-1:0] init_board,
     input [81-1:0]   init_board_blank,
     output reg [81*4-1:0] board,
@@ -18,75 +22,21 @@ module Sudoku_Solver (
     // ==========================
     // Row and column
     // ==========================
-    reg [3:0] data_next;
-    reg [3:0] row_next;
-    reg [3:0] col_next;
+    reg [3:0] data_next, last_data;
+    reg [3:0] row_next, col_next;
+
+    // ==========================
+    // Mouse position
+    // ==========================
+    wire [3:0] mouse_row, mouse_col; 
+    Cnt_to_Row_Col MtR_inst(MOUSE_Y_POS, mouse_row);
+	Cnt_to_Row_Col MtC_inst(MOUSE_X_POS, mouse_col);
 
     // ==========================
     // Check the sudoku is valid
     // ==========================
+    wire [0:8] row_valid, col_valid, blk_valid;
     assign valid = (row_valid == 9'b111111111) & (col_valid == 9'b111111111) & (blk_valid == 9'b111111111);
-    // ------------- Row ------------- 
-    wire [0:8] row_valid;
-    Check_Valid CV_row0(row_valid[0], board[SIZE-1-:4], board[SIZE-5-:4], board[SIZE-9-:4], board[SIZE-13-:4], 
-                        board[SIZE-17-:4], board[SIZE-21-:4], board[SIZE-25-:4], board[SIZE-29-:4], board[SIZE-33-:4]); 
-    Check_Valid CV_row1(row_valid[1], board[SIZE-37-:4], board[SIZE-41-:4], board[SIZE-45-:4], board[SIZE-49-:4], 
-                        board[SIZE-53-:4], board[SIZE-57-:4], board[SIZE-61-:4], board[SIZE-65-:4], board[SIZE-69-:4]); 
-    Check_Valid CV_row2(row_valid[2], board[SIZE-73-:4], board[SIZE-77-:4], board[SIZE-81-:4], board[SIZE-85-:4], 
-                        board[SIZE-89-:4], board[SIZE-93-:4], board[SIZE-97-:4], board[SIZE-101-:4], board[SIZE-105-:4]);
-    Check_Valid CV_row3(row_valid[3], board[SIZE-109-:4], board[SIZE-113-:4], board[SIZE-117-:4], board[SIZE-121-:4], 
-                        board[SIZE-125-:4], board[SIZE-129-:4], board[SIZE-133-:4], board[SIZE-137-:4], board[SIZE-141-:4]);
-    Check_Valid CV_row4(row_valid[4], board[SIZE-145-:4], board[SIZE-149-:4], board[SIZE-153-:4], board[SIZE-157-:4], 
-                        board[SIZE-161-:4], board[SIZE-165-:4], board[SIZE-169-:4], board[SIZE-173-:4], board[SIZE-177-:4]);
-    Check_Valid CV_row5(row_valid[5], board[SIZE-181-:4], board[SIZE-185-:4], board[SIZE-189-:4], board[SIZE-193-:4], 
-                        board[SIZE-197-:4], board[SIZE-201-:4], board[SIZE-205-:4], board[SIZE-209-:4], board[SIZE-213-:4]);
-    Check_Valid CV_row6(row_valid[6], board[SIZE-217-:4], board[SIZE-221-:4], board[SIZE-225-:4], board[SIZE-229-:4], 
-                        board[SIZE-233-:4], board[SIZE-237-:4], board[SIZE-241-:4], board[SIZE-245-:4], board[SIZE-249-:4]);
-    Check_Valid CV_row7(row_valid[7], board[SIZE-253-:4], board[SIZE-257-:4], board[SIZE-261-:4], board[SIZE-265-:4], 
-                        board[SIZE-269-:4], board[SIZE-273-:4], board[SIZE-277-:4], board[SIZE-281-:4], board[SIZE-285-:4]);
-    Check_Valid CV_row8(row_valid[8], board[SIZE-289-:4], board[SIZE-293-:4], board[SIZE-297-:4], board[SIZE-301-:4], 
-                        board[SIZE-305-:4], board[SIZE-309-:4], board[SIZE-313-:4], board[SIZE-317-:4], board[SIZE-321-:4]);
-    // ------------- Column ------------- 
-    wire [0:8] col_valid;
-    Check_Valid CV_col0(col_valid[0], board[SIZE-1-:4], board[SIZE-37-:4], board[SIZE-73-:4], board[SIZE-109-:4], 
-                        board[SIZE-145-:4], board[SIZE-181-:4], board[SIZE-217-:4], board[SIZE-253-:4], board[SIZE-289-:4]);
-    Check_Valid CV_col1(col_valid[1], board[SIZE-5-:4], board[SIZE-41-:4], board[SIZE-77-:4], board[SIZE-113-:4], 
-                        board[SIZE-149-:4], board[SIZE-185-:4], board[SIZE-221-:4], board[SIZE-257-:4], board[SIZE-293-:4]);
-    Check_Valid CV_col2(col_valid[2], board[SIZE-9-:4], board[SIZE-45-:4], board[SIZE-81-:4], board[SIZE-117-:4], 
-                        board[SIZE-153-:4], board[SIZE-189-:4], board[SIZE-225-:4], board[SIZE-261-:4], board[SIZE-297-:4]);
-    Check_Valid CV_col3(col_valid[3], board[SIZE-13-:4], board[SIZE-49-:4], board[SIZE-85-:4], board[SIZE-121-:4], 
-                        board[SIZE-157-:4], board[SIZE-193-:4], board[SIZE-229-:4], board[SIZE-265-:4], board[SIZE-301-:4]);
-    Check_Valid CV_col4(col_valid[4], board[SIZE-17-:4], board[SIZE-53-:4], board[SIZE-89-:4], board[SIZE-125-:4], 
-                        board[SIZE-161-:4], board[SIZE-197-:4], board[SIZE-233-:4], board[SIZE-269-:4], board[SIZE-305-:4]);
-    Check_Valid CV_col5(col_valid[5], board[SIZE-21-:4], board[SIZE-57-:4], board[SIZE-93-:4], board[SIZE-129-:4], 
-                        board[SIZE-165-:4], board[SIZE-201-:4], board[SIZE-237-:4], board[SIZE-273-:4], board[SIZE-309-:4]);
-    Check_Valid CV_col6(col_valid[6], board[SIZE-25-:4], board[SIZE-61-:4], board[SIZE-97-:4], board[SIZE-133-:4], 
-                        board[SIZE-169-:4], board[SIZE-205-:4], board[SIZE-241-:4], board[SIZE-277-:4], board[SIZE-313-:4]);
-    Check_Valid CV_col7(col_valid[7], board[SIZE-29-:4], board[SIZE-65-:4], board[SIZE-101-:4], board[SIZE-137-:4], 
-                        board[SIZE-173-:4], board[SIZE-209-:4], board[SIZE-245-:4], board[SIZE-281-:4], board[SIZE-317-:4]);
-    Check_Valid CV_col8(col_valid[8], board[SIZE-33-:4], board[SIZE-69-:4], board[SIZE-105-:4], board[SIZE-141-:4], 
-                        board[SIZE-177-:4], board[SIZE-213-:4], board[SIZE-249-:4], board[SIZE-285-:4], board[SIZE-321-:4]);
-    // ------------- Block ------------- 
-    wire [0:8] blk_valid;
-    Check_Valid CV_blk0(blk_valid[0], board[SIZE-1-:4], board[SIZE-5-:4], board[SIZE-9-:4], board[SIZE-37-:4], 
-                        board[SIZE-41-:4], board[SIZE-45-:4], board[SIZE-73-:4], board[SIZE-77-:4], board[SIZE-81-:4]);
-    Check_Valid CV_blk1(blk_valid[1], board[SIZE-13-:4], board[SIZE-17-:4], board[SIZE-21-:4], board[SIZE-49-:4], 
-                        board[SIZE-53-:4], board[SIZE-57-:4], board[SIZE-85-:4], board[SIZE-89-:4], board[SIZE-93-:4]);
-    Check_Valid CV_blk2(blk_valid[2], board[SIZE-25-:4], board[SIZE-29-:4], board[SIZE-33-:4], board[SIZE-61-:4], 
-                        board[SIZE-65-:4], board[SIZE-69-:4], board[SIZE-97-:4], board[SIZE-101-:4], board[SIZE-105-:4]);
-    Check_Valid CV_blk3(blk_valid[3], board[SIZE-109-:4], board[SIZE-113-:4], board[SIZE-117-:4], board[SIZE-145-:4], 
-                        board[SIZE-149-:4], board[SIZE-153-:4], board[SIZE-181-:4], board[SIZE-185-:4], board[SIZE-189-:4]);
-    Check_Valid CV_blk4(blk_valid[4], board[SIZE-121-:4], board[SIZE-125-:4], board[SIZE-129-:4], board[SIZE-157-:4], 
-                        board[SIZE-161-:4], board[SIZE-165-:4], board[SIZE-193-:4], board[SIZE-197-:4], board[SIZE-201-:4]);
-    Check_Valid CV_blk5(blk_valid[5], board[SIZE-133-:4], board[SIZE-137-:4], board[SIZE-141-:4], board[SIZE-169-:4], 
-                        board[SIZE-173-:4], board[SIZE-177-:4], board[SIZE-205-:4], board[SIZE-209-:4], board[SIZE-213-:4]);
-    Check_Valid CV_blk6(blk_valid[6], board[SIZE-217-:4], board[SIZE-221-:4], board[SIZE-225-:4], board[SIZE-253-:4], 
-                        board[SIZE-257-:4], board[SIZE-261-:4], board[SIZE-289-:4], board[SIZE-293-:4], board[SIZE-297-:4]);
-    Check_Valid CV_blk7(blk_valid[7], board[SIZE-229-:4], board[SIZE-233-:4], board[SIZE-237-:4], board[SIZE-265-:4], 
-                        board[SIZE-269-:4], board[SIZE-273-:4], board[SIZE-301-:4], board[SIZE-305-:4], board[SIZE-309-:4]);
-    Check_Valid CV_blk8(blk_valid[8], board[SIZE-241-:4], board[SIZE-245-:4], board[SIZE-249-:4], board[SIZE-277-:4], 
-                        board[SIZE-281-:4], board[SIZE-285-:4], board[SIZE-313-:4], board[SIZE-317-:4], board[SIZE-321-:4]);
-
 
     // ==========================
     // Clock update
@@ -109,15 +59,85 @@ module Sudoku_Solver (
     // ==========================
     always @(*) begin
         if (read && board_blank[row*9+col]) begin
-            data_next = data;
             row_next = row;
             col_next = col;
+            last_data = data;
+            data_next = data;
+        end else if (MOUSE_MIDDLE && board_blank[mouse_row*9+mouse_col]) begin
+            row_next = mouse_row;
+            col_next = mouse_col;
+            last_data = last_data;
+            data_next = 0;
+        end else if (MOUSE_RIGHT && board_blank[mouse_row*9+mouse_col]) begin
+            row_next = mouse_row;
+            col_next = mouse_col;
+            last_data = last_data;
+            data_next = last_data;
         end else begin
+            last_data = last_data;
             row_next = row_next;
             col_next = col_next;
             data_next = board[(row_next*9+col_next)*4+3-:4];
         end
     end
+
+    // ------------- Row ------------- 
+    Check_Valid CV_row0(row_valid[0], board[SIZE-1-:4], board[SIZE-5-:4], board[SIZE-9-:4], board[SIZE-13-:4], 
+                        board[SIZE-17-:4], board[SIZE-21-:4], board[SIZE-25-:4], board[SIZE-29-:4], board[SIZE-33-:4]); 
+    Check_Valid CV_row1(row_valid[1], board[SIZE-37-:4], board[SIZE-41-:4], board[SIZE-45-:4], board[SIZE-49-:4], 
+                        board[SIZE-53-:4], board[SIZE-57-:4], board[SIZE-61-:4], board[SIZE-65-:4], board[SIZE-69-:4]); 
+    Check_Valid CV_row2(row_valid[2], board[SIZE-73-:4], board[SIZE-77-:4], board[SIZE-81-:4], board[SIZE-85-:4], 
+                        board[SIZE-89-:4], board[SIZE-93-:4], board[SIZE-97-:4], board[SIZE-101-:4], board[SIZE-105-:4]);
+    Check_Valid CV_row3(row_valid[3], board[SIZE-109-:4], board[SIZE-113-:4], board[SIZE-117-:4], board[SIZE-121-:4], 
+                        board[SIZE-125-:4], board[SIZE-129-:4], board[SIZE-133-:4], board[SIZE-137-:4], board[SIZE-141-:4]);
+    Check_Valid CV_row4(row_valid[4], board[SIZE-145-:4], board[SIZE-149-:4], board[SIZE-153-:4], board[SIZE-157-:4], 
+                        board[SIZE-161-:4], board[SIZE-165-:4], board[SIZE-169-:4], board[SIZE-173-:4], board[SIZE-177-:4]);
+    Check_Valid CV_row5(row_valid[5], board[SIZE-181-:4], board[SIZE-185-:4], board[SIZE-189-:4], board[SIZE-193-:4], 
+                        board[SIZE-197-:4], board[SIZE-201-:4], board[SIZE-205-:4], board[SIZE-209-:4], board[SIZE-213-:4]);
+    Check_Valid CV_row6(row_valid[6], board[SIZE-217-:4], board[SIZE-221-:4], board[SIZE-225-:4], board[SIZE-229-:4], 
+                        board[SIZE-233-:4], board[SIZE-237-:4], board[SIZE-241-:4], board[SIZE-245-:4], board[SIZE-249-:4]);
+    Check_Valid CV_row7(row_valid[7], board[SIZE-253-:4], board[SIZE-257-:4], board[SIZE-261-:4], board[SIZE-265-:4], 
+                        board[SIZE-269-:4], board[SIZE-273-:4], board[SIZE-277-:4], board[SIZE-281-:4], board[SIZE-285-:4]);
+    Check_Valid CV_row8(row_valid[8], board[SIZE-289-:4], board[SIZE-293-:4], board[SIZE-297-:4], board[SIZE-301-:4], 
+                        board[SIZE-305-:4], board[SIZE-309-:4], board[SIZE-313-:4], board[SIZE-317-:4], board[SIZE-321-:4]);
+    // ------------- Column ------------- 
+    Check_Valid CV_col0(col_valid[0], board[SIZE-1-:4], board[SIZE-37-:4], board[SIZE-73-:4], board[SIZE-109-:4], 
+                        board[SIZE-145-:4], board[SIZE-181-:4], board[SIZE-217-:4], board[SIZE-253-:4], board[SIZE-289-:4]);
+    Check_Valid CV_col1(col_valid[1], board[SIZE-5-:4], board[SIZE-41-:4], board[SIZE-77-:4], board[SIZE-113-:4], 
+                        board[SIZE-149-:4], board[SIZE-185-:4], board[SIZE-221-:4], board[SIZE-257-:4], board[SIZE-293-:4]);
+    Check_Valid CV_col2(col_valid[2], board[SIZE-9-:4], board[SIZE-45-:4], board[SIZE-81-:4], board[SIZE-117-:4], 
+                        board[SIZE-153-:4], board[SIZE-189-:4], board[SIZE-225-:4], board[SIZE-261-:4], board[SIZE-297-:4]);
+    Check_Valid CV_col3(col_valid[3], board[SIZE-13-:4], board[SIZE-49-:4], board[SIZE-85-:4], board[SIZE-121-:4], 
+                        board[SIZE-157-:4], board[SIZE-193-:4], board[SIZE-229-:4], board[SIZE-265-:4], board[SIZE-301-:4]);
+    Check_Valid CV_col4(col_valid[4], board[SIZE-17-:4], board[SIZE-53-:4], board[SIZE-89-:4], board[SIZE-125-:4], 
+                        board[SIZE-161-:4], board[SIZE-197-:4], board[SIZE-233-:4], board[SIZE-269-:4], board[SIZE-305-:4]);
+    Check_Valid CV_col5(col_valid[5], board[SIZE-21-:4], board[SIZE-57-:4], board[SIZE-93-:4], board[SIZE-129-:4], 
+                        board[SIZE-165-:4], board[SIZE-201-:4], board[SIZE-237-:4], board[SIZE-273-:4], board[SIZE-309-:4]);
+    Check_Valid CV_col6(col_valid[6], board[SIZE-25-:4], board[SIZE-61-:4], board[SIZE-97-:4], board[SIZE-133-:4], 
+                        board[SIZE-169-:4], board[SIZE-205-:4], board[SIZE-241-:4], board[SIZE-277-:4], board[SIZE-313-:4]);
+    Check_Valid CV_col7(col_valid[7], board[SIZE-29-:4], board[SIZE-65-:4], board[SIZE-101-:4], board[SIZE-137-:4], 
+                        board[SIZE-173-:4], board[SIZE-209-:4], board[SIZE-245-:4], board[SIZE-281-:4], board[SIZE-317-:4]);
+    Check_Valid CV_col8(col_valid[8], board[SIZE-33-:4], board[SIZE-69-:4], board[SIZE-105-:4], board[SIZE-141-:4], 
+                        board[SIZE-177-:4], board[SIZE-213-:4], board[SIZE-249-:4], board[SIZE-285-:4], board[SIZE-321-:4]);
+    // ------------- Block ------------- 
+    Check_Valid CV_blk0(blk_valid[0], board[SIZE-1-:4], board[SIZE-5-:4], board[SIZE-9-:4], board[SIZE-37-:4], 
+                        board[SIZE-41-:4], board[SIZE-45-:4], board[SIZE-73-:4], board[SIZE-77-:4], board[SIZE-81-:4]);
+    Check_Valid CV_blk1(blk_valid[1], board[SIZE-13-:4], board[SIZE-17-:4], board[SIZE-21-:4], board[SIZE-49-:4], 
+                        board[SIZE-53-:4], board[SIZE-57-:4], board[SIZE-85-:4], board[SIZE-89-:4], board[SIZE-93-:4]);
+    Check_Valid CV_blk2(blk_valid[2], board[SIZE-25-:4], board[SIZE-29-:4], board[SIZE-33-:4], board[SIZE-61-:4], 
+                        board[SIZE-65-:4], board[SIZE-69-:4], board[SIZE-97-:4], board[SIZE-101-:4], board[SIZE-105-:4]);
+    Check_Valid CV_blk3(blk_valid[3], board[SIZE-109-:4], board[SIZE-113-:4], board[SIZE-117-:4], board[SIZE-145-:4], 
+                        board[SIZE-149-:4], board[SIZE-153-:4], board[SIZE-181-:4], board[SIZE-185-:4], board[SIZE-189-:4]);
+    Check_Valid CV_blk4(blk_valid[4], board[SIZE-121-:4], board[SIZE-125-:4], board[SIZE-129-:4], board[SIZE-157-:4], 
+                        board[SIZE-161-:4], board[SIZE-165-:4], board[SIZE-193-:4], board[SIZE-197-:4], board[SIZE-201-:4]);
+    Check_Valid CV_blk5(blk_valid[5], board[SIZE-133-:4], board[SIZE-137-:4], board[SIZE-141-:4], board[SIZE-169-:4], 
+                        board[SIZE-173-:4], board[SIZE-177-:4], board[SIZE-205-:4], board[SIZE-209-:4], board[SIZE-213-:4]);
+    Check_Valid CV_blk6(blk_valid[6], board[SIZE-217-:4], board[SIZE-221-:4], board[SIZE-225-:4], board[SIZE-253-:4], 
+                        board[SIZE-257-:4], board[SIZE-261-:4], board[SIZE-289-:4], board[SIZE-293-:4], board[SIZE-297-:4]);
+    Check_Valid CV_blk7(blk_valid[7], board[SIZE-229-:4], board[SIZE-233-:4], board[SIZE-237-:4], board[SIZE-265-:4], 
+                        board[SIZE-269-:4], board[SIZE-273-:4], board[SIZE-301-:4], board[SIZE-305-:4], board[SIZE-309-:4]);
+    Check_Valid CV_blk8(blk_valid[8], board[SIZE-241-:4], board[SIZE-245-:4], board[SIZE-249-:4], board[SIZE-277-:4], 
+                        board[SIZE-281-:4], board[SIZE-285-:4], board[SIZE-313-:4], board[SIZE-317-:4], board[SIZE-321-:4]);
     
 endmodule
 

@@ -6,11 +6,12 @@
 
 ## Memory Usage (tot : 2 _ 1024 _ 1024 = 2097152)
 
-- Weight : 16 \* (784 \* 64 + 64 + 64 \* 10 + 10) = 814240
+- Weight : 12 \* (784 \* 64 + 64 + 64 \* 10 + 10) = 610680
 - Picture_Menu : 2 \* 76800 = 153600
 - Picture_Game : 3 \* 76800 = 230400
 - Picture_Over : 2 \* 76800 = 153600
 - Pixel_Number : 10 \* (52\*52) = 27040
+- Sudoku_Generator : 20736
 
 ## Dependency
 
