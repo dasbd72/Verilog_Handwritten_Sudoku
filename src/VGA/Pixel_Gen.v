@@ -1,11 +1,12 @@
-module Pixel_Gen (h_cnt, v_cnt, clka, stage, board_blank, board, pixel_out);
-    input [9:0] h_cnt; 
-	input [9:0] v_cnt; 	
-    input clka;
-    input stage;
-	input [9*9-1:0] board_blank;
-	input [9*9*4-1:0] board;
-    output [11:0] pixel_out;
+module Pixel_Gen (
+    input clka,
+    input [9:0] h_cnt,
+	input [9:0] v_cnt, 	
+    input stage,
+	input [9*9-1:0] board_blank,
+	input [9*9*4-1:0] board,
+    output [11:0] pixel_out
+	);
 
 	parameter Menu = 0;
 	parameter Game = 1;

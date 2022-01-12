@@ -13,8 +13,6 @@ module TOP (
 	inout PS2_CLK,
 	inout PS2_DATA,
     output valid,
-    input [3:0] row,
-    input [3:0] col,
 
     output pmod_1,
 	output pmod_2,
