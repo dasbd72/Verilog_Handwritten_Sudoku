@@ -36,7 +36,7 @@ module Game_Pixel_Gen(
     // ==========================
     // Memory of game background and number
     // ==========================
-	wire [3:0] game_mem;
+	wire [2:0] game_mem;
     wire num_mem [1:9];
     
     // ==========================
