@@ -44,6 +44,9 @@ module TOP (
     wire mouse_on_return_button;
     wire [3:0] red_out, green_out, blue_out;
 
+    wire op_mouse;
+    OnePulse op1(clk, !MOUSE_LEFT, op_mouse);
+
     reg [1:0] State, State_next;
     parameter [1:0] SMENU = 2'd0;
     parameter [1:0] SGAME = 2'd1;
@@ -59,7 +62,7 @@ module TOP (
     always @(*) begin
         case (State)
             SMENU: begin 
-                if (mouse_on_start_button && MOUSE_LEFT) begin
+                if (mouse_on_start_button && op_mouse) begin
                     State_next = SGAME;
                 end else begin
                     State_next = SMENU;
@@ -75,7 +78,7 @@ module TOP (
                 game_init = 0;
             end
             SOVER: begin 
-                if (mouse_on_return_button && MOUSE_LEFT) begin
+                if (mouse_on_return_button && op_mouse) begin
                     State_next = SMENU;
                 end else begin
                     State_next = SOVER;
