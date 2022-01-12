@@ -2,20 +2,20 @@
 module Output_Processor #(
     parameter BITS = 32
     ) (
-    input [BITS*10 - 1:0] layer_1,
+    input [BITS*10 - 1:0] layer_2,
     output [3:0] number
     );
     wire signed [BITS-1:0] value [1:9];
 
-    assign value[1] = layer_1[BITS*9-1-:BITS];
-    assign value[2] = layer_1[BITS*8-1-:BITS];
-    assign value[3] = layer_1[BITS*7-1-:BITS];
-    assign value[4] = layer_1[BITS*6-1-:BITS];
-    assign value[5] = layer_1[BITS*5-1-:BITS];
-    assign value[6] = layer_1[BITS*4-1-:BITS];
-    assign value[7] = layer_1[BITS*3-1-:BITS];
-    assign value[8] = layer_1[BITS*2-1-:BITS];
-    assign value[9] = layer_1[BITS*1-1-:BITS];
+    assign value[1] = layer_2[BITS*9-1-:BITS];
+    assign value[2] = layer_2[BITS*8-1-:BITS];
+    assign value[3] = layer_2[BITS*7-1-:BITS];
+    assign value[4] = layer_2[BITS*6-1-:BITS];
+    assign value[5] = layer_2[BITS*5-1-:BITS];
+    assign value[6] = layer_2[BITS*4-1-:BITS];
+    assign value[7] = layer_2[BITS*3-1-:BITS];
+    assign value[8] = layer_2[BITS*2-1-:BITS];
+    assign value[9] = layer_2[BITS*1-1-:BITS];
 
     wire                    L_1_2 = value[1] > value[2];
     wire                    L_3_4 = value[3] > value[4];
