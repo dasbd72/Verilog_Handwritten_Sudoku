@@ -41,7 +41,7 @@ module Sudoku_Solver (
     // ==========================
     // Clock update
     // ==========================
-    always @(posedge clk) begin
+    always @(posedge clk, posedge reset) begin
         if (reset) begin
             board <= 0;
             board_blank <= 0;

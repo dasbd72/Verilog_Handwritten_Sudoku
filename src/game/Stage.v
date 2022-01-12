@@ -25,10 +25,10 @@ module Stage (
     parameter [1:0] SOVER = 2'd2;
 
     reg send_connect_next, send_start_next, status_next;
-    parameter SLAVE = 1;
     parameter MASTER = 0;
+    parameter SLAVE = 1;
 
-    always @(posedge clk) begin
+    always @(posedge clk, posedge reset) begin
         if (reset) begin
             State <= SMENU;
             send_connect <= 0;
@@ -45,8 +45,16 @@ module Stage (
     always @(*) begin
         case (State)
             SMENU: begin 
+
+                // if (mouse_on_start_button && op_mouse) begin
+                //     State_next = SGAME;
+                //     // send_start_next = 1;
+                // end else begin
+                //     State_next = SMENU;
+                //     // send_start_next = 0;
+                // end
                 if (status == MASTER) begin
-                    if (mouse_on_start_button && op_mouse) begin
+                    if (mouse_on_start_button & op_mouse) begin
                         State_next = SGAME;
                         send_start_next = 1;
                     end else begin
@@ -64,16 +72,23 @@ module Stage (
                 game_init = 1;
             end
             SGAME: begin 
-                if (game_finish || receive_game_finish) begin
+                // if (game_finish) begin
+                //     State_next = SOVER;
+                // end else begin
+                //     State_next = SGAME;
+                // end
+                if (status == MASTER & game_finish) begin
+                    State_next = SOVER;
+                end else if (receive_game_finish || game_finish) begin
                     State_next = SOVER;
                 end else begin
                     State_next = SGAME;
                 end
                 game_init = 0;
-                send_start_next = 0;
+                send_start_next = send_start_next;
             end
             SOVER: begin 
-                if (mouse_on_return_button && op_mouse) begin
+                if (mouse_on_return_button & op_mouse) begin
                     State_next = SMENU;
                 end else begin
                     State_next = SOVER;
@@ -102,8 +117,8 @@ module Stage (
                 send_connect_next = send_connect;
             end
         end else begin
-            status_next = status_next;
-            send_connect_next = send_connect_next;
+            status_next = status;
+            send_connect_next = send_connect;
         end
     end
     

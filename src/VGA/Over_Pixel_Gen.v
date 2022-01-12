@@ -30,6 +30,7 @@ module Over_Pixel_Gen (
                     pixel_over_out = BLACK;
                 end
             end
+            3: pixel_over_out = WHITE;
             default : pixel_over_out = BLACK;
         endcase
     end
