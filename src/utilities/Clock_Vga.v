@@ -1,6 +1,6 @@
-module Clock_VGA(clk, clk_vga);
+module Clock_VGA(clk, clka);
 	input clk;
-	output clk_vga;
+	output clka;
 	reg [21:0] num;
 	wire [21:0] next_num;
 
@@ -9,5 +9,5 @@ module Clock_VGA(clk, clk_vga);
 	end
 
 	assign next_num = num + 1'b1;
-	assign clk_vga = num[1];
+	assign clka = num[1];
 endmodule

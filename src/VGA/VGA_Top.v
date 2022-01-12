@@ -1,9 +1,12 @@
 module Vga_Top(
-	input clk,
+	input clka,
 	input rst,
-	input stage,
+	input [1:0] state,
+	input MOUSE_LEFT,
 	input enable_mouse_display,
 	input enable_track_display_out,
+	input mouse_on_start_button,
+	input mouse_on_return_button,
 	input [11:0] mouse_pixel,
 	input [81*4-1:0] board,
 	input [81-1:0] board_blank,
@@ -16,9 +19,7 @@ module Vga_Top(
 	output vsync
 	);
 
-	wire clk_vga;
 	wire valid;
-	
 	reg [11:0] pixel;
 	wire [11:0] pixel_out;
 	
@@ -34,25 +35,21 @@ module Vga_Top(
 		end
 	end
 
-	// assign pixel = (enable_mouse_display) ? mouse_pixel : pixel_out;
-
-	Clock_VGA clock_vga_inst(
-		.clk(clk),
-		.clk_vga(clk_vga)
-	);
-
 	Pixel_Gen pixel_gen_inst(
 		.h_cnt(h_cnt),
 		.v_cnt(v_cnt),
-		.clka(clk_vga),
-		.stage(stage),
+		.clka(clka),
+		.state(state),
+		.MOUSE_LEFT(MOUSE_LEFT),
+		.mouse_on_start_button(mouse_on_start_button),
+		.mouse_on_return_button(mouse_on_return_button),
 		.board_blank(board_blank),
 		.board(board),
 		.pixel_out(pixel_out)
 	);
 
 	Vga_Controller vga_controller_inst(
-		.pclk(clk_vga),
+		.pclk(clka),
 		.reset(rst),
 		.hsync(hsync),
 		.vsync(vsync),

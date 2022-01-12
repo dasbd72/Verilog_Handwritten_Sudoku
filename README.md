@@ -8,6 +8,7 @@
 
 - Picture_Menu : 2 \* 76800 = 153600
 - Picture_Game : 4 \* 76800 = 307200
+- Picture_Over : 2 \* 76800 = 153600
 - Pixel_Number : 10 \* (52\*52) = 27040
 
 ## Dependency

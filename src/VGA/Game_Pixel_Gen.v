@@ -10,11 +10,11 @@ module Game_Pixel_Gen(
 	parameter SIZE = 52;
     parameter [9:0] blk_pos [8:0] = {0, 53, 106, 161, 214, 267, 322, 375, 428};
     parameter [11:0] color [0:4] = {
-        12'h23A,
-        12'h019,
-        12'hD99,
-        12'hC77,
-        12'h106
+        12'h23A, // Blue
+        12'h019, // Blue_line
+        12'hD99, // Pink
+        12'hC77, // Pink_line
+        12'h106  // Background
     };
 
     // ==========================
