@@ -51,10 +51,8 @@ module TOP (
     always @(posedge clk) begin
         if (op_reset) begin
             State <= SMENU;
-        end else if (!MOUSE_LEFT) begin
-            State <= State_next;
         end else begin
-            State <= State;
+            State <= State_next;
         end
     end
 
@@ -91,7 +89,6 @@ module TOP (
         endcase
     
     end
-
 
     Clock_VGA clock_vga_inst(
 		.clk(clk),
