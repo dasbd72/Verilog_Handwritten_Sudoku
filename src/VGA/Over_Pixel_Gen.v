@@ -12,7 +12,7 @@ module Over_Pixel_Gen (
     parameter TOUCH = 12'h32E;
     parameter CLICK = 12'h3E2;
 
-    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
+    wire [18:0] pixel_background_addr = h_cnt + 640 * v_cnt;
     wire [1:0] over_mem;
 
     always @(*) begin
