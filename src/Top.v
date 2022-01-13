@@ -1,7 +1,7 @@
 module TOP (
     input clk,
 	input btnU, 
-    input [3:0] in_data,
+    // input [3:0] in_data,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
@@ -46,21 +46,22 @@ module TOP (
     wire [9:0] block_x_pos, block_y_pos;
     wire [3:0] red_out, green_out, blue_out;
 
-    wire start_read;
+    wire start_predict, start_read;
     wire status; // Master:0 or slave:1
     wire connected = receive_connect & send_connect;
-    wire game_init, send_game_finish;
+    wire game_init;
     wire mouse_on_start_button;
     wire mouse_on_connect_button;
     wire mouse_on_return_button;
 
     wire [1:0] State;
+    wire [3:0] predicted_number;
 
     Stage stage_inst(
         .clk(clk),
         .reset(op_reset),
-        .game_finish(send_game_finish),
         .MOUSE_LEFT(MOUSE_LEFT),
+        .game_finish(send_game_finish),
         .mouse_on_start_button(mouse_on_start_button),
         .mouse_on_connect_button(mouse_on_connect_button),
         .mouse_on_return_button(mouse_on_return_button),
@@ -137,7 +138,7 @@ module TOP (
         .reset(op_reset), 
         .start(game_init), 
         .read(start_read), 
-        .data(in_data),
+        .data(predicted_number),
         .row(block_y), 
         .col(block_x), 
         .MOUSE_X_POS(MOUSE_X_POS),
@@ -175,7 +176,7 @@ module TOP (
         .MOUSE_X_POS(MOUSE_X_POS),
         .MOUSE_Y_POS(MOUSE_Y_POS),
         .MOUSE_LEFT(MOUSE_LEFT),
-        .valid(start_read),
+        .valid(start_predict),
         .track(track),
         .block_x(block_x),
         .block_y(block_y),
@@ -196,12 +197,21 @@ module TOP (
         .blue_out(blue_out)
     );
 
-    Music_Top music_inst(
+    Predict predict_inst(
         .clk(clk),
-        .reset(op_reset),
-        .pmod_1(pmod_1),
-        .pmod_2(pmod_2),
-        .pmod_4(pmod_4)
+        .rst(op_reset),
+        .start(start_predict),
+        .track_input(track),
+        .predicted_number(predicted_number),
+        .finish(start_read)
     );
+
+    // Music_Top music_inst(
+    //     .clk(clk),
+    //     .reset(op_reset),
+    //     .pmod_1(pmod_1),
+    //     .pmod_2(pmod_2),
+    //     .pmod_4(pmod_4)
+    // );
 
 endmodule

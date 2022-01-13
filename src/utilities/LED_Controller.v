@@ -44,7 +44,7 @@ module LED_Controller(
                     direction_next = 1;
                 end else begin 
                     if (direction) begin
-                        if (LED == 16'h1000) begin
+                        if (LED == 16'h8000) begin
                             LED_next = LED >> 1;
                             direction_next = 0;
                         end else begin
