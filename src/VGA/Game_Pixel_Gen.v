@@ -39,14 +39,14 @@ module Game_Pixel_Gen(
 	assign enable_red = enable_num_display & !board_blank[row*9+col];
 
 	assign enable_time_game[3] = (h_cnt >= 500 & h_cnt < 552 & v_cnt >= 200 & v_cnt < 252);
-	assign enable_time_game[2] =  (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 200 & v_cnt < 252);
+	assign enable_time_game[2] = (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 200 & v_cnt < 252);
 	assign enable_time_game[1] = (h_cnt >= 500 & h_cnt < 552 & v_cnt >= 260 & v_cnt < 312);
-	assign enable_time_game[0] =  (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 260 & v_cnt < 312);
+	assign enable_time_game[0] = (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 260 & v_cnt < 312);
 	
     wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
 	wire [2:0] game_mem;
 
-	assign display_num = board[row*9+col];
+	assign display_num = board[(row*9+col)*4+3-:4];
 
 	always @(*) begin
 		if (enable_num_display) begin

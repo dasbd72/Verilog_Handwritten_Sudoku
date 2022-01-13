@@ -65,13 +65,13 @@ module Pixel_Gen (
 			SOVER: begin 
 				pixel_num_addr = pixel_num_addr_over;
 				if (enable_time_over[3] & num_mem[time_spent[15:12]]) begin
-					pixel_out = 12'hD1D;
+					pixel_out = 12'h990;
 				end else if (enable_time_over[2] & num_mem[time_spent[11:8]]) begin
-					pixel_out = 12'hD1D;
+					pixel_out = 12'h990;
 				end else if (enable_time_over[1] & num_mem[time_spent[7:4]]) begin
-					pixel_out = 12'h000;
+					pixel_out = 12'hFFF;
 				end else if (enable_time_over[0] & num_mem[time_spent[3:0]]) begin
-					pixel_out = 12'h000;
+					pixel_out = 12'hFFF;
 				end else begin
 					pixel_out = pixel_over_out;
 				end
