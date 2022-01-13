@@ -11,7 +11,6 @@ module Stage (
         input receive_game_finish,
         output reg send_start,
         output reg send_connect,
-        output connecting,
         output reg game_init,
         output reg status,
         output reg [1:0] State
@@ -29,7 +28,7 @@ module Stage (
     parameter MASTER = 0;
     parameter SLAVE = 1;
 
-    assign connecting = (State == SMENU) ? (receive_connect & send_connect) : connecting;
+    wire connecting = (State == SMENU) ? (receive_connect & send_connect) : connecting;
 
     always @(posedge clk, posedge reset) begin
         if (reset) begin

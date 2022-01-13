@@ -50,7 +50,6 @@ module TOP (
 
     wire start_predict, start_read;
     wire status; // Master:0 or slave:1
-    wire connecting;
     wire game_init;
     wire mouse_on_start_button;
     wire mouse_on_connect_button;
@@ -79,7 +78,6 @@ module TOP (
         .receive_game_finish(receive_game_finish),
         .send_connect(send_connect),
         .send_start(send_start),
-        .connecting(connecting),
         /* ======================= */
         .game_init(game_init),
         .status(status),
@@ -134,7 +132,6 @@ module TOP (
     LFSR lfsr_inst(
         .clk(clk),
         .rst(op_reset),
-        .connecting(connecting),
         .out(random)
     );
 
