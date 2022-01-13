@@ -57,8 +57,10 @@ module TOP (
 
     wire [1:0] State;
     wire [3:0] predicted_number;
+    wire [15:0] time_spent;
 
     assign an = 4'b1110;
+    assign pmod_4 = State == 1;
     Seven_seg sevenseg_inst(
         .status(status),
         .seg(seg)
@@ -120,6 +122,7 @@ module TOP (
         .mouse_pixel(mouse_pixel),
         .board(board),
         .board_blank(board_blank),
+        .time_spent(time_spent),
         .vgaRed(vgaRed),
         .vgaGreen(vgaGreen),
         .vgaBlue(vgaBlue),
@@ -218,8 +221,13 @@ module TOP (
         .clk(clk),
         .reset(op_reset),
         .pmod_1(pmod_1),
-        .pmod_2(pmod_2),
-        .pmod_4(pmod_4)
+        .pmod_2(pmod_2)
+    );
+
+    Timer timer_inst(
+        .clk(clk),
+        .rst(game_init),
+        .time_spent(time_spent)
     );
 
 endmodule

@@ -13,6 +13,7 @@ module Vga_Top(
 	input [11:0] mouse_pixel,
 	input [81*4-1:0] board,
 	input [81-1:0] board_blank,
+	input [15:0] time_spent,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
@@ -55,6 +56,7 @@ module Vga_Top(
 		.mouse_on_return_button(mouse_on_return_button),
 		.board_blank(board_blank),
 		.board(board),
+		.time_spent(time_spent),
 		.pixel_out(pixel_out)
 	);
 
