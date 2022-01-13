@@ -33,9 +33,7 @@ module MouseDraw #(
     reg  [31:0]     next_count;
 
     wire [9:0]      mouse_x_pos;
-    // reg  [9:0]      prev_mouse_x_pos;
     wire [9:0]      mouse_y_pos;
-    // reg  [9:0]      prev_mouse_y_pos;
     reg  [3:0]      next_block_x;
     reg  [3:0]      next_block_y;
     reg  [2703:0]   next_track;
@@ -81,8 +79,6 @@ module MouseDraw #(
                             mouse_y_pos >= block_y_pos &&
                             mouse_x_pos < block_x_pos + BLKSIZE &&
                             mouse_y_pos < block_y_pos + BLKSIZE );
-        // prev_mouse_x_pos <= mouse_x_pos;
-        // prev_mouse_y_pos <= mouse_y_pos;
     end
 
     // ========================================
@@ -127,7 +123,7 @@ module MouseDraw #(
             else if (mouse_y_pos >= 108) next_block_y   = 4'd2;
             else if (mouse_y_pos >= 54) next_block_y    = 4'd1;
             else if (mouse_y_pos >= 0) next_block_y     = 4'd0;
-            else next_block_y = 9;
+            else next_block_y = 4'd9;
         end else next_block_y = block_y;
         if(SWAIT_2_SDRAW) begin
             if (mouse_x_pos >= 588) next_block_x      = 4'd8;
@@ -139,7 +135,7 @@ module MouseDraw #(
             else if (mouse_x_pos >= 268) next_block_x = 4'd2;
             else if (mouse_x_pos >= 214) next_block_x = 4'd1;
             else if (mouse_x_pos >= 160) next_block_x = 4'd0;
-            else next_block_x = 9;
+            else next_block_x = 4'd9;
         end else next_block_x = block_x;
     end
     always @(*) begin
@@ -182,7 +178,7 @@ module MouseDraw #(
                     else next_track = track;
                 end
             end
-            SFIN:   next_track = 2703'b0;
+            SFIN:   next_track = track;
             default: next_track = track;
         endcase
     end

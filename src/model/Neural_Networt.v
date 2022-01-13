@@ -173,32 +173,6 @@ module Neural_Network #(
     /* Address */
     always @(*) begin
         next_addr = next_count;
-        // case (state)
-        //     SWAIT: next_addr = 16'b0;
-        //     SKERN1: begin
-        //         if(count == K1 + 2) next_addr = K1;
-        //         else if(addr == K1 - 1) next_addr = addr;
-        //         else next_addr = next_count;
-        //     end
-        //     SBIAS1: begin
-        //         if(count == B1 + 1) next_addr = B1;
-        //         else if(addr == B1 - 1) next_addr = addr;
-        //         else next_addr = next_count;
-        //     end
-        //     SRELU1: next_addr = B1;
-        //     SKERN2: begin
-        //         if(count == K2 + 2) next_addr = K2;
-        //         else if(addr == K2 - 1) next_addr = addr;
-        //         else next_addr = next_count;
-        //     end
-        //     SBIAS2: begin
-        //         if(count == B2 + 1) next_addr = 16'b0;
-        //         else if(addr == B2 - 1) next_addr = addr;
-        //         else next_addr = next_count;
-        //     end
-        //     SFIN: next_addr = 16'b0;
-        //     default: next_addr = 16'b0;
-        // endcase
     end
     /* Row Col */
     always @(*) begin

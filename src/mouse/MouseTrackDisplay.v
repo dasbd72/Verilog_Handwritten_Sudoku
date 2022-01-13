@@ -36,11 +36,11 @@ module MouseTrackDisplay #(
                 if(row == 0 || row == BSIZE-1 || col == 0 || col == BSIZE-1)
                     assign track_adjust[row*BSIZE + col] = track[(row)*BSIZE + (col)];
                 else 
-                    assign track_adjust[row*BSIZE + col] = (
-                        track[(row)*BSIZE + (col)]    ||
-                        track[(row+1)*BSIZE + (col)]) || (
-                        track[(row-1)*BSIZE + (col)]  ||
-                        track[(row)*BSIZE + (col+1)]) ||
+                    assign track_adjust[row*BSIZE + col] = 
+                        track[(row)*BSIZE + (col)]   ||
+                        track[(row+1)*BSIZE + (col)] ||
+                        track[(row-1)*BSIZE + (col)] ||
+                        track[(row)*BSIZE + (col+1)] ||
                         track[(row)*BSIZE + (col-1)];
             end
         end
