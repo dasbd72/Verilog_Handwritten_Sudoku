@@ -214,12 +214,12 @@ module TOP (
         .finish(start_read)
     );
 
-    // Music_Top music_inst(
-    //     .clk(clk),
-    //     .reset(op_reset),
-    //     .pmod_1(pmod_1),
-    //     .pmod_2(pmod_2),
-    //     .pmod_4(pmod_4)
-    // );
+    Music_Top music_inst(
+        .clk(clk),
+        .reset(op_reset),
+        .pmod_1(pmod_1),
+        .pmod_2(pmod_2),
+        .pmod_4(pmod_4)
+    );
 
 endmodule

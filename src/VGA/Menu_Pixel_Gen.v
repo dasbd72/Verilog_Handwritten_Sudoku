@@ -65,9 +65,7 @@ module Menu_Pixel_Gen (
 
     Menu_Mem_Gen blk_mem_gen_menu(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_background_addr),
-		.dina(0),
 		.douta(menu_mem)
 	); 
     

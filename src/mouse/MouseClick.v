@@ -16,17 +16,13 @@ module MouseClick (
 
     Menu_Mem_Gen blk_mem_gen_menu2(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_addr),
-		.dina(0),
 		.douta(menu_mem)
 	); 
 
     Over_Mem_Gen blk_mem_gen_over2(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_addr),
-		.dina(0),
 		.douta(over_mem)
 	); 
     

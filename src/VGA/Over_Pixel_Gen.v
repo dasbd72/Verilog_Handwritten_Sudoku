@@ -37,9 +37,7 @@ module Over_Pixel_Gen (
 
     Over_Mem_Gen blk_mem_gen_over(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_background_addr),
-		.dina(0),
 		.douta(over_mem)
 	); 
 
