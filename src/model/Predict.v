@@ -1,8 +1,9 @@
 module Predict #(
-    localparam SWAIT    = 2'd0,
-    localparam SCAPTURE = 2'd1,
-    localparam SPROCESS = 2'd2,
-    localparam SFIN     = 2'd3
+    localparam SWAIT    = 3'd0,
+    localparam SCAPTURE = 3'd1,
+    localparam SNEURAL  = 3'd2,
+    localparam SOUT     = 3'd3,
+    localparam SFIN     = 3'd4
     ) (
     input  clk,
     input  rst,
@@ -15,8 +16,8 @@ module Predict #(
     // ========================================
     // Signals
     // ========================================
-    reg [1 : 0] state;
-    reg [1 : 0] next_state;
+    reg [2 : 0] state;
+    reg [2 : 0] next_state;
 
     // wire  clk_2;
     wire start_process;
@@ -63,7 +64,7 @@ module Predict #(
     // ========================================
     // Combinationals
     // ========================================
-    assign start_process = (state == SCAPTURE || state == SPROCESS);
+    assign start_process = (state == SCAPTURE || state == SNEURAL);
 
     always @(*) begin
         case (state)
@@ -71,11 +72,12 @@ module Predict #(
                 if(start) next_state = SCAPTURE;
                 else next_state = state;
             end 
-            SCAPTURE: next_state = SPROCESS;
-            SPROCESS: begin
-                if(finish) next_state = SFIN;
+            SCAPTURE: next_state = SNEURAL;
+            SNEURAL: begin
+                if(finish) next_state = SOUT;
                 else next_state = state;
             end
+            SOUT: next_state = SFIN;
             SFIN: next_state = SWAIT;
             default: next_state = SWAIT;
         endcase
