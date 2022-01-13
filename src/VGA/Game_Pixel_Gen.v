@@ -34,19 +34,13 @@ module Game_Pixel_Gen(
     // ==========================
 	wire [2:0] game_mem;
     wire num_mem [1:9];
-    
-    // ==========================
-    // Pixel of game background
-    // ==========================
-    wire [11:0] pixel_game;
-
 
     always @(*) begin
 		if (num_mem[board[(row*9+col)*4+3-:4]]) begin
             if (board_blank[row*9+col]) begin
                 pixel_game_out = 12'h000;
             end else begin
-                pixel_game_out = 12'ha44;
+                pixel_game_out = 12'he00;
             end
 		end else begin
 			pixel_game_out = color[game_mem];
