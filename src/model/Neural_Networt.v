@@ -94,9 +94,6 @@ module Neural_Network #(
             layer_1 <= next_layer_1;
             layer_2 <= next_layer_2;
         end
-    end
-    /* Temp Signal */
-    always @(posedge clk) begin
         row <= next_row;
         col <= next_col;
         row_1 <= row;
