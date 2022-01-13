@@ -80,7 +80,7 @@ module Stage (
                     end
                 end
                 game_init = 0;
-                send_start_next = send_start_next;
+                send_start_next = send_start;
             end
             SOVER: begin 
                 if (mouse_on_return_button & op_mouse) begin

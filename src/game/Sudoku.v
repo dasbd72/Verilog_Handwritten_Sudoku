@@ -1,82 +1,186 @@
-module Sudoku_Solver (
-    input clk,
-    input reset,
-    input start,
-    input read,
-    input [3:0] data,
-    input [3:0] row,
-    input [3:0] col,
-    input [9:0] MOUSE_X_POS,
-    input [9:0] MOUSE_Y_POS,
-    input MOUSE_MIDDLE,
-    input MOUSE_RIGHT,
-    input [81*4-1:0] init_board,
-    input [81-1:0]   init_board_blank,
-    output reg [81*4-1:0] board,
-    output reg [81-1:0] board_blank,
-    output valid
+module Sudoku_Solver #(
+    parameter SIZE  = 81*4,
+    parameter SWAIT = 2'd0,
+    parameter SCAPT = 2'd1,
+    parameter SGAME = 2'd2,
+    parameter SFIN  = 2'd3,
+    parameter CFIN  = 32'd500000000
+    ) (
+    input wire              clk,
+    input wire              reset,
+    input wire              start,
+    input wire              read,
+    input wire [3:0]        data,
+    input wire [3:0]        row,
+    input wire [3:0]        col,
+    input wire [9:0]        MOUSE_X_POS,
+    input wire [9:0]        MOUSE_Y_POS,
+    input wire              MOUSE_MIDDLE,
+    input wire              MOUSE_RIGHT,
+    input wire [81*4-1:0]   init_board,
+    input wire [81-1:0]     init_board_blank,
+    output reg [81*4-1:0]   board,
+    output reg [81-1:0]     board_blank,
+    output reg              valid
     );
     
-    parameter SIZE = 81*4;
+    reg  [1:0]  state;
+    reg  [1:0]  next_state;
+    reg  [31:0] count;
+    reg  [31:0] next_count;
 
-    // ==========================
-    // Row and column
-    // ==========================
-    reg [3:0] data_next, last_data;
-    reg [3:0] row_next, col_next;
+    reg  [81*4-1:0] next_board;
+    wire [81*4-1:0] next_board_game;
+    reg  [81-1:0]   next_board_blank;
 
-    // ==========================
-    // Mouse position
-    // ==========================
+    reg  [3:0] row_next;
+    reg  [3:0] col_next;
+    reg  [3:0] data_next;
+    reg  [3:0] data_reg;
+    reg  [3:0] next_data_reg;
+
+    wire next_valid;
+
+    /* Mouse */
     wire [3:0] mouse_row, mouse_col; 
     Cnt_to_Row_Col MtR_inst(MOUSE_Y_POS, mouse_row);
 	Cnt_to_Row_Col MtC_inst(MOUSE_X_POS, mouse_col);
 
-    // ==========================
-    // Check the sudoku is valid
-    // ==========================
+    /*  Game end or not */    
     wire [0:8] row_valid, col_valid, blk_valid;
-    assign valid = (row_valid == 9'b111111111) & (col_valid == 9'b111111111) & (blk_valid == 9'b111111111);
+    wire board_correct;
+
+    /* mouse btn signal */
+    reg  MOUSE_RIGHT_delay;
+    wire MOUSE_RIGHT_up;
+    reg  MOUSE_MIDDLE_delay;
+    wire MOUSE_MIDDLE_up;
 
     // ==========================
-    // Clock update
+    // DFF
     // ==========================
-    always @(posedge clk, posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
-            board <= 0;
+            state       <= SWAIT;
+            count       <= 0;
+            board       <= 0;
             board_blank <= 0;
-        end else if (start) begin 
-            board <= init_board;
-            board_blank <= init_board_blank;
-        end else begin    
-            board[(row_next*9+col_next)*4+3-:4] <= data_next;
-            board_blank <= board_blank;
+            data_reg    <= 0;
+            valid       <= 0;
+        end else begin
+            state       <= next_state;
+            count       <= next_count;
+            board       <= next_board;
+            board_blank <= next_board_blank;
+            data_reg    <= next_data_reg;
+            valid       <= next_valid;
         end
+    end
+    always @(posedge clk ) begin
+        MOUSE_RIGHT_delay <= MOUSE_RIGHT;
+        MOUSE_MIDDLE_delay <= MOUSE_MIDDLE;
     end
 
     // ==========================
-    // State operations
+    // Combinationals
+    // ==========================
+    assign board_correct = (&row_valid) & (&col_valid) & (&blk_valid);
+    assign MOUSE_RIGHT_up = MOUSE_RIGHT_delay & ~MOUSE_RIGHT;
+    assign MOUSE_MIDDLE_up = MOUSE_MIDDLE_delay & ~MOUSE_MIDDLE;
+
+    assign next_valid = (state == SFIN && count == CFIN);
+
+    /* state */
+    always @(*) begin
+        case (state)
+            SWAIT: begin
+                if(start)           next_state = SCAPT;
+                else                next_state = state;
+            end
+            SCAPT:                  next_state = SGAME;
+            SGAME: begin
+                if(board_correct)   next_state = SFIN;
+                else                next_state = state;
+            end
+            SFIN: begin
+                if(count == CFIN)   next_state = SWAIT;
+                else                next_state = state;
+            end
+            default:                next_state = state;
+        endcase
+    end
+    /* count */
+    always @(*) begin
+        case (state)
+            SGAME: begin
+                if(board_correct)   next_count = 1;
+                else                next_count = 0;
+            end 
+            SFIN: begin
+                if(count == CFIN)   next_count = 0;
+                else                next_count = count + 1;
+            end
+            default:                next_count = 0;
+        endcase
+    end
+    /* board */
+    genvar i;
+    generate
+        for(i = 0; i < 81; i=i+1) begin
+            assign next_board_game[(i+1)*4-1-:4] = (i == col_next + (row_next * 9)) ? data_next : board[(i+1)*4-1-:4];
+        end
+    endgenerate
+    always @(*) begin
+        case (state)
+            SWAIT: next_board          = 0;
+            SCAPT: next_board          = init_board;
+            SGAME: begin
+                
+            end
+            SFIN:  next_board          = board;
+            default: next_board        = board;
+        endcase
+    end
+    /* board blank */
+    always @(*) begin
+        case (state)
+            SWAIT:      next_board_blank    = 0;
+            SCAPT:      next_board_blank    = init_board_blank;
+            default:    next_board_blank    = board_blank;
+        endcase
+    end
+    /* data_reg */
+    always @(*) begin
+        case (state)
+            SWAIT: next_data_reg = 0;
+            SGAME: begin
+                if(read) next_data_reg = data;
+                else next_data_reg = data_reg;
+            end
+            default: next_data_reg = data_reg;
+        endcase
+    end
+
+
+    // ==========================
+    // data
     // ==========================
     always @(*) begin
         if (read && board_blank[row*9+col]) begin
             row_next = row;
             col_next = col;
-            last_data = data;
             data_next = data;
-        end else if (MOUSE_MIDDLE && board_blank[mouse_row*9+mouse_col]) begin
+        end else if (MOUSE_MIDDLE_up && board_blank[mouse_row*9+mouse_col]) begin
             row_next = mouse_row;
             col_next = mouse_col;
-            last_data = last_data;
             data_next = 0;
-        end else if (MOUSE_RIGHT && board_blank[mouse_row*9+mouse_col]) begin
+        end else if (MOUSE_RIGHT_up && board_blank[mouse_row*9+mouse_col]) begin
             row_next = mouse_row;
             col_next = mouse_col;
-            last_data = last_data;
-            data_next = last_data;
+            data_next = data_reg;
         end else begin
-            last_data = last_data;
-            row_next = row_next;
-            col_next = col_next;
+            row_next = row;
+            col_next = col;
             data_next = board[(row_next*9+col_next)*4+3-:4];
         end
     end

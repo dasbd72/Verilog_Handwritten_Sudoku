@@ -19,13 +19,13 @@ module Neural_Network #(
     localparam BIAS2_S = 50880,
     localparam BIAS2_E = 50889,
     /* State */
-    localparam SWAIT    = 0,
-    localparam SSTART   = 1,
-    localparam SDENSE1  = 2,
-    localparam SDENSE2  = 3,
-    localparam SFIN     = 4,
+    localparam SWAIT    = 3'd0,
+    localparam SSTART   = 3'd1,
+    localparam SDENSE1  = 3'd2,
+    localparam SDENSE2  = 3'd3,
+    localparam SFIN     = 3'd4,
     /* count */
-    localparam CSTART   = 2,
+    localparam CSTART   = 3'd2,
 
     localparam dummy = 0
     )(
@@ -52,10 +52,10 @@ module Neural_Network #(
     // ========================================
     wire clk_3;
 
-    reg  [3:0] state;
-    reg  [3:0] next_state;
-    reg  [3:0] count;
-    reg  [3:0] next_count;
+    reg  [2:0] state;
+    reg  [2:0] next_state;
+    reg  [2:0] count;
+    reg  [2:0] next_count;
 
     /* wire [28*28 - 1 : 0] layer_0; */
     reg  [BITSL*WIDTH1 - 1 : 0] layer_1;
