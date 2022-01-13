@@ -13,10 +13,10 @@ module Menu_Pixel_Gen (
     parameter WHITE = 12'hFFF;
     parameter BLACK = 12'h000;
     parameter TOUCH = 12'h32E;
-    parameter CLICK = 12'h3E2;
-    parameter RECEIVE_CONNECT = 12'h171;
+    parameter CLICK = 12'hDD2;
+    parameter RECEIVE_CONNECT = 12'h7FF;
     parameter SEND_CONNECT = 12'h123;
-    parameter isCONNECT = 12'h2F5;
+    parameter isCONNECT = 12'h1E1;
 
     wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
     wire [1:0] menu_mem;

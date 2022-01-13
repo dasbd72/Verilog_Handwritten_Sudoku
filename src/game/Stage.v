@@ -80,7 +80,7 @@ module Stage (
                     end
                 end
                 game_init = 0;
-                send_start_next = send_start;
+                send_start_next = send_start_next;
             end
             SOVER: begin 
                 if (mouse_on_return_button & op_mouse) begin
@@ -100,7 +100,7 @@ module Stage (
     end
 
     always @(*) begin
-        if (mouse_on_connect_button & op_mouse) begin
+        if (State == SMENU & mouse_on_connect_button & op_mouse) begin
             if (receive_connect) begin
                 status_next = SLAVE;
                 send_connect_next = 1;
@@ -110,7 +110,7 @@ module Stage (
             end
         end else begin
             status_next = status;
-            send_connect_next = send_connect;
+            send_connect_next = 0;
         end
     end
     

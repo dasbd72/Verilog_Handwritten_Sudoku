@@ -14,7 +14,7 @@ module Game_Pixel_Gen(
         12'h019, // Blue_line
         12'hD99, // Pink
         12'hC77, // Pink_line
-        12'h106  // Background
+        12'h038  // Background
     };
 
     // ==========================
@@ -50,7 +50,7 @@ module Game_Pixel_Gen(
             if (board_blank[row*9+col]) begin
                 pixel_game_out = 12'h000;
             end else begin
-                pixel_game_out = 12'he00;
+                pixel_game_out = 12'ha73;
             end
 		end else begin
 			pixel_game_out = color[game_mem];
