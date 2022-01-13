@@ -134,9 +134,7 @@ module Sudoku_Solver #(
         case (state)
             SWAIT: next_board          = 0;
             SCAPT: next_board          = init_board;
-            SGAME: begin
-                
-            end
+            SGAME: next_board          = next_board_game;
             SFIN:  next_board          = board;
             default: next_board        = board;
         endcase

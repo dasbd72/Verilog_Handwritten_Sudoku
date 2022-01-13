@@ -28,7 +28,8 @@ module Stage (
     parameter MASTER = 0;
     parameter SLAVE = 1;
 
-    wire connecting = (State == SMENU) ? (receive_connect & send_connect) : connecting;
+    reg connecting;
+    wire next_connecting = (State == SMENU) ? (receive_connect & send_connect_next) : connecting;
 
     always @(posedge clk, posedge reset) begin
         if (reset) begin
@@ -36,11 +37,13 @@ module Stage (
             send_connect <= 0;
             send_start <= 0;
             status <= MASTER;
+            connecting <= 0;
         end else begin
             State <= State_next;
             send_connect <= send_connect_next;
             send_start <= send_start_next;
             status <= status_next;
+            connecting <= next_connecting;
         end
     end
 

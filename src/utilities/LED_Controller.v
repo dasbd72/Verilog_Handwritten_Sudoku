@@ -67,7 +67,7 @@ module LED_Controller(
             end
             default: begin
                 LED_next = 16'h0000;
-                direction_next = direction_next;
+                direction_next = direction;
             end
         endcase
 
