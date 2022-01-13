@@ -11,6 +11,7 @@ module Stage (
         input receive_game_finish,
         output reg send_start,
         output reg send_connect,
+        output reg connecting,
         output reg game_init,
         output reg status,
         output [1:0] State
@@ -33,11 +34,13 @@ module Stage (
             State <= SMENU;
             send_connect <= 0;
             send_start <= 0;
+            connecting <= 0;
             status <= MASTER;
         end else begin
             State <= State_next;
             send_connect <= send_connect_next;
             send_start <= send_start_next;
+            connecting <= send_connect_next & receive_connect;
             status <= status_next;
         end
     end
@@ -45,14 +48,6 @@ module Stage (
     always @(*) begin
         case (State)
             SMENU: begin 
-
-                // if (mouse_on_start_button && op_mouse) begin
-                //     State_next = SGAME;
-                //     // send_start_next = 1;
-                // end else begin
-                //     State_next = SMENU;
-                //     // send_start_next = 0;
-                // end
                 if (status == MASTER) begin
                     if (mouse_on_start_button & op_mouse) begin
                         State_next = SGAME;
@@ -72,17 +67,18 @@ module Stage (
                 game_init = 1;
             end
             SGAME: begin 
-                // if (game_finish) begin
-                //     State_next = SOVER;
-                // end else begin
-                //     State_next = SGAME;
-                // end
-                if (status == MASTER & game_finish) begin
-                    State_next = SOVER;
-                end else if (receive_game_finish || game_finish) begin
-                    State_next = SOVER;
+                if (connecting) begin
+                    if (game_finish | receive_game_finish) begin
+                        State_next = SOVER;
+                    end else begin
+                        State_next = SGAME;
+                    end
                 end else begin
-                    State_next = SGAME;
+                    if (game_finish) begin
+                        State_next = SOVER;
+                    end else begin
+                        State_next = SGAME;
+                    end
                 end
                 game_init = 0;
                 send_start_next = send_start_next;
@@ -105,11 +101,11 @@ module Stage (
     end
 
     always @(*) begin
-        if (State == SMENU) begin
-            if (status == MASTER && receive_connect) begin
+        if (State == SMENU & !connecting) begin
+            if (receive_connect) begin
                 status_next = SLAVE;
                 send_connect_next = 1;
-            end else if (status == MASTER && mouse_on_connect_button && op_mouse) begin
+            end else if (mouse_on_connect_button && op_mouse)begin
                 status_next = MASTER;
                 send_connect_next = 1;
             end else begin

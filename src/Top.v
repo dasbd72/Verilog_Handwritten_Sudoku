@@ -1,11 +1,10 @@
 module TOP (
     input clk,
 	input btnU, 
-    // input [3:0] in_data,
 	output [3:0] vgaRed,
 	output [3:0] vgaGreen,
 	output [3:0] vgaBlue,
-    output [15:0] LED,
+    output [6:0] LED,
     input receive_connect,
     input receive_start,
     input receive_game_finish,
@@ -21,6 +20,14 @@ module TOP (
 	output pmod_2,
 	output pmod_4
     );
+
+    assign LED[6] = status;
+    assign LED[5] = receive_connect;
+    assign LED[4] = receive_start;
+    assign LED[3] = receive_game_finish;
+    assign LED[2] = send_connect;
+    assign LED[1] = send_start;
+    assign LED[0] = send_game_finish;
 
     wire db_reset, op_reset;
     Debounce db0(clk, btnU, db_reset);
@@ -48,7 +55,7 @@ module TOP (
 
     wire start_predict, start_read;
     wire status; // Master:0 or slave:1
-    wire connected = receive_connect & send_connect;
+    wire connecting;
     wire game_init;
     wire mouse_on_start_button;
     wire mouse_on_connect_button;
@@ -71,18 +78,19 @@ module TOP (
         .receive_game_finish(receive_game_finish),
         .send_connect(send_connect),
         .send_start(send_start),
+        .connecting(connecting),
         /* ======================= */
         .game_init(game_init),
         .status(status),
         .State(State)
     );
 
-    LED_Controller ledcontroller_inst(
-        .clk(clk),
-        .rst(op_reset),
-        .State(State),
-        .LED(LED)
-    );
+    // LED_Controller ledcontroller_inst(
+    //     .clk(clk),
+    //     .rst(op_reset),
+    //     .State(State),
+    //     .LED(LED)
+    // );
 
     Clock_VGA clock_vga_inst(
 		.clk(clk),
@@ -102,7 +110,7 @@ module TOP (
         .clka(clka),
         .rst(op_reset),
         .state(State),
-        .connected(connected),
+        .connected(connecting),
         .MOUSE_LEFT(MOUSE_LEFT),
         .enable_mouse_display(enable_mouse_display),
         .enable_track_display_out(enable_track_display_out),
