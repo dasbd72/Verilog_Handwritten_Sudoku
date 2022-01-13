@@ -11,6 +11,7 @@ module Pixel_Gen (
 	input mouse_on_return_button,
 	input [9*9-1:0] board_blank,
 	input [9*9*4-1:0] board,
+	input [15:0] time_spent,
     output reg [11:0] pixel_out
 	);
 
@@ -38,6 +39,7 @@ module Pixel_Gen (
 		.v_cnt(v_cnt),
 		.board_blank(board_blank),
 		.board(board),
+		.time_spent(time_spent),
 		.pixel_game_out(pixel_game_out)
 	);
 
