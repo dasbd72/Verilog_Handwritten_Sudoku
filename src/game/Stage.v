@@ -101,7 +101,7 @@ module Stage (
     end
 
     always @(*) begin
-        if (State == SMENU & !connecting) begin
+        if (State == SMENU & !send_connect) begin
             if (receive_connect) begin
                 status_next = SLAVE;
                 send_connect_next = 1;
