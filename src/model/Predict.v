@@ -18,14 +18,14 @@ module Predict #(
     reg [1 : 0] state;
     reg [1 : 0] next_state;
 
-    wire  clk_2;
+    // wire  clk_2;
     wire start_process;
     reg  [28*28 - 1: 0] reg_scaled_track_input;
     wire [28*28 - 1: 0] scaled_track_input;
     wire [32*10 - 1:0]  layer_2;
 
 
-    div cd(clk, clk_2);
+    // div cd(clk, clk_2);
 
     Scale m_scale(
         .img(track_input),
@@ -33,7 +33,7 @@ module Predict #(
     );
 
     Neural_Network m_Neural_Network(
-        .clk(clk_2),
+        .clk(clk),
         .rst(rst),
         .start(start_process),
         .layer_0(reg_scaled_track_input),
