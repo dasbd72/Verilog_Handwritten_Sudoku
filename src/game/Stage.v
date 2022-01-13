@@ -28,7 +28,7 @@ module Stage (
     parameter MASTER = 0;
     parameter SLAVE = 1;
 
-    wire connecting = receive_connect & send_connect;
+    wire connecting = (State == SMENU) ? (receive_connect & send_connect) : connecting;
 
     always @(posedge clk, posedge reset) begin
         if (reset) begin
@@ -100,13 +100,18 @@ module Stage (
     end
 
     always @(*) begin
-        if (State == SMENU & mouse_on_connect_button & op_mouse) begin
-            if (receive_connect) begin
-                status_next = SLAVE;
-                send_connect_next = 1;
+        if (State == SMENU) begin
+            if (mouse_on_connect_button & op_mouse) begin
+                if (receive_connect) begin
+                    status_next = SLAVE;
+                    send_connect_next = 1;
+                end else begin
+                    status_next = MASTER;
+                    send_connect_next = 1;
+                end
             end else begin
-                status_next = MASTER;
-                send_connect_next = 1;
+                status_next = status;
+                send_connect_next = send_connect;
             end
         end else begin
             status_next = status;

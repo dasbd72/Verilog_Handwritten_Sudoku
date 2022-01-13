@@ -25,11 +25,7 @@ module Game_Pixel_Gen(
 	Cnt_to_Row_Col CtR_inst(v_cnt, row);
 	Cnt_to_Row_Col CtC_inst(h_cnt, col);
 	
-    // --------------- Enable number signals --------------- // 
 	wire enable_num_display = (h_cnt < 480) & board[(row*9+col)*4+3-:4] != 0;
-    // ==========================
-    // Address for pixel
-    // ==========================
     wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
 	wire [11:0] pixel_num_addr = enable_num_display ? (v_cnt-blk_pos[row]) * SIZE + (h_cnt-blk_pos[col]) : 0;
 
@@ -50,7 +46,7 @@ module Game_Pixel_Gen(
             if (board_blank[row*9+col]) begin
                 pixel_game_out = 12'h000;
             end else begin
-                pixel_game_out = 12'ha73;
+                pixel_game_out = 12'ha44;
             end
 		end else begin
 			pixel_game_out = color[game_mem];

@@ -15,7 +15,7 @@ module Menu_Pixel_Gen (
     parameter TOUCH = 12'h32E;
     parameter CLICK = 12'hDD2;
     parameter RECEIVE_CONNECT = 12'h7FF;
-    parameter SEND_CONNECT = 12'h123;
+    parameter SEND_CONNECT = 12'h456;
     parameter isCONNECT = 12'h1E1;
 
     wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
@@ -39,17 +39,21 @@ module Menu_Pixel_Gen (
                 end else begin // Connect button
                     if (receive_connect & send_connect) begin
                         pixel_menu_out = isCONNECT;
+                    end else if (receive_connect) begin 
+                        if (mouse_on_connect_button & MOUSE_LEFT) begin
+                            pixel_menu_out = CLICK; 
+                        end else begin
+                            pixel_menu_out = RECEIVE_CONNECT;
+                        end
+                    end else if (send_connect) begin
+                        pixel_menu_out = SEND_CONNECT;
                     end else if (mouse_on_connect_button) begin
                         if (MOUSE_LEFT) begin
                             pixel_menu_out = CLICK; 
                         end else begin
                             pixel_menu_out = TOUCH;
                         end
-                    end else if (receive_connect) begin 
-                        pixel_menu_out = RECEIVE_CONNECT;
-                    end else if (send_connect) begin
-                        pixel_menu_out = SEND_CONNECT;
-                    end else begin
+                    end  else begin
                         pixel_menu_out = BLACK;
                     end    
                 end
