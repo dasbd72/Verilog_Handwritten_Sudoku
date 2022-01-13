@@ -227,6 +227,7 @@ module TOP (
     Timer timer_inst(
         .clk(clk),
         .rst(game_init),
+        .state(State),
         .time_spent(time_spent)
     );
 

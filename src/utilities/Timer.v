@@ -1,6 +1,7 @@
 module Timer (
     input clk,
     input rst,
+    input [1:0] state,
     output reg [15:0] time_spent
     );
 
@@ -21,6 +22,8 @@ module Timer (
     always @(posedge clk, posedge rst) begin
         if (rst) begin
             time_spent <= 0;
+        end else if (state == 2'd2) begin
+            time_spent <= time_spent;
         end else if (dclk) begin
             time_spent <= time_spent_next;
         end else begin
