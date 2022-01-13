@@ -1,33 +1,33 @@
 module Neural_Network #(
     /* SIZE */
-    localparam BITSW = 16,
-    localparam BITSL = 32,
-    localparam WIDTH0 = 784,
-    localparam HEIGHT1 = 784,
-    localparam WEIGHT1 = 64,
-    localparam WIDTH1 = 64,
-    localparam HEIGHT2 = 64,
-    localparam WEIGHT2 = 10,
-    localparam WIDTH2 = 10,
+    // localparam BITSW = 16,
+    localparam BITSL = 6'd32,
+    localparam WIDTH0 = 10'd784,
+    localparam HEIGHT1 = 10'd784,
+    // localparam WEIGHT1 = 64,
+    localparam WIDTH1 = 7'd64,
+    localparam HEIGHT2 = 7'd64,
+    localparam WEIGHT2 = 4'd10,
+    localparam WIDTH2 = 4'd10,
     /* Memory Address */
-    localparam KER1_S = 0,
-    localparam KER1_E = 50175,
-    localparam BIAS1_S = 50176,
-    localparam BIAS1_E = 50239,
-    localparam KER2_S = 50240,
-    localparam KER2_E = 50879,
-    localparam BIAS2_S = 50880,
-    localparam BIAS2_E = 50889,
+    // localparam KER1_S = 16'd0,
+    localparam KER1_E = 16'd50175,
+    localparam BIAS1_S = 16'd50176,
+    localparam BIAS1_E = 16'd50239,
+    localparam KER2_S = 16'd50240,
+    localparam KER2_E = 16'd50879,
+    // localparam BIAS2_S = 16'd50880,
+    localparam BIAS2_E = 16'd50889,
     /* State */
-    localparam SWAIT    = 3'd0,
-    localparam SSTART   = 3'd1,
-    localparam SDENSE1  = 3'd2,
-    localparam SDENSE2  = 3'd3,
-    localparam SFIN     = 3'd4,
+    localparam [2:0] SWAIT    = 3'd0,
+    localparam [2:0] SSTART   = 3'd1,
+    localparam [2:0] SDENSE1  = 3'd2,
+    localparam [2:0] SDENSE2  = 3'd3,
+    localparam [2:0] SFIN     = 3'd4,
     /* count */
-    localparam CSTART   = 3'd2,
+    localparam [2:0] CSTART   = 3'd2,
 
-    localparam dummy = 0
+    localparam dummy = 1'b0
     )(
     input wire  clk,
     input wire  rst,
@@ -101,9 +101,9 @@ module Neural_Network #(
             state       <= SWAIT;
             layer_1     <= 0;
             layer_2     <= 0;
-            mem_addr    <= 0;
-            count       <= 0;
-            finish      <= 0;
+            mem_addr    <= 16'b0;
+            count       <= 3'b0;
+            finish      <= 1'b0;
         end else begin
             state       <= next_state;
             layer_1     <= next_layer_1;

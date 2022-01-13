@@ -25,8 +25,8 @@ module Stage (
     parameter [1:0] SOVER = 2'd2;
 
     reg send_connect_next, send_start_next, status_next;
-    parameter MASTER = 0;
-    parameter SLAVE = 1;
+    parameter MASTER = 1'b0;
+    parameter SLAVE = 1'b1;
 
     reg connecting;
     wire next_connecting = (State == SMENU) ? (receive_connect & send_connect_next) : connecting;
@@ -34,10 +34,10 @@ module Stage (
     always @(posedge clk, posedge reset) begin
         if (reset) begin
             State <= SMENU;
-            send_connect <= 0;
-            send_start <= 0;
+            send_connect <= 1'b0;
+            send_start <= 1'b0;
             status <= MASTER;
-            connecting <= 0;
+            connecting <= 1'b0;
         end else begin
             State <= State_next;
             send_connect <= send_connect_next;
@@ -53,10 +53,10 @@ module Stage (
                 if (status == MASTER) begin
                     if (mouse_on_start_button & op_mouse) begin
                         State_next = SGAME;
-                        send_start_next = 1;
+                        send_start_next = 1'b1;
                     end else begin
                         State_next = SMENU;
-                        send_start_next = 0;
+                        send_start_next = 1'b0;
                     end
                 end else begin
                     if (receive_start) begin
@@ -64,9 +64,9 @@ module Stage (
                     end else begin
                         State_next = SMENU;
                     end
-                    send_start_next = 0;
+                    send_start_next = 1'b0;
                 end
-                game_init = 1;
+                game_init = 1'b1;
             end
             SGAME: begin 
                 if (connecting) begin
@@ -82,7 +82,7 @@ module Stage (
                         State_next = SGAME;
                     end
                 end
-                game_init = 0;
+                game_init = 1'b0;
                 send_start_next = send_start;
             end
             SOVER: begin 
@@ -91,13 +91,13 @@ module Stage (
                 end else begin
                     State_next = SOVER;
                 end
-                game_init = 1;
-                send_start_next = 0;
+                game_init = 1'b1;
+                send_start_next = 1'b0;
             end
             default: begin
                 State_next = SMENU;
-                game_init = 1;
-                send_start_next = 0;
+                game_init = 1'b1;
+                send_start_next = 1'b0;
             end
         endcase
     end
@@ -107,10 +107,10 @@ module Stage (
             if (mouse_on_connect_button & op_mouse) begin
                 if (receive_connect) begin
                     status_next = SLAVE;
-                    send_connect_next = 1;
+                    send_connect_next = 1'b1;
                 end else begin
                     status_next = MASTER;
-                    send_connect_next = 1;
+                    send_connect_next = 1'b1;
                 end
             end else begin
                 status_next = status;
@@ -118,7 +118,7 @@ module Stage (
             end
         end else begin
             status_next = status;
-            send_connect_next = 0;
+            send_connect_next = 1'b0;
         end
     end
     

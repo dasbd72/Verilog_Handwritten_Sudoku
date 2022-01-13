@@ -1,9 +1,9 @@
 module Predict #(
-    localparam SWAIT    = 3'd0,
-    localparam SCAPTURE = 3'd1,
-    localparam SNEURAL  = 3'd2,
-    localparam SOUT     = 3'd3,
-    localparam SFIN     = 3'd4
+    localparam [2:0] SWAIT    = 3'd0,
+    localparam [2:0] SCAPTURE = 3'd1,
+    localparam [2:0] SNEURAL  = 3'd2,
+    localparam [2:0] SOUT     = 3'd3,
+    localparam [2:0] SFIN     = 3'd4
     ) (
     input  wire clk,
     input  wire rst,
@@ -54,8 +54,8 @@ module Predict #(
         if(rst) begin
             state                   <= SWAIT;
             reg_scaled_track_input  <= 0;
-            predicted_number        <= 0;
-            finish                  <= 0;
+            predicted_number        <= 4'b0;
+            finish                  <= 1'b0;
         end else begin
             state                   <= next_state;
             reg_scaled_track_input  <= next_reg_scaled_track_input;
@@ -98,8 +98,8 @@ module Predict #(
     /*  */
     always @(*) begin
         case (state)
-            SOUT: next_finish = 1;
-            default: next_finish = 0;
+            SOUT: next_finish = 1'b1;
+            default: next_finish = 1'b0;
         endcase
     end
 

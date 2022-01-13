@@ -1,7 +1,7 @@
 `timescale 1ps/1ps
 module SudokuGenerator #(
-    parameter size = 9,
-    parameter bit = 4
+    parameter size = 4'd9,
+    parameter bit = 4'd4
     ) (
     input [15:0] random,
     output reg [81*4-1:0] board,

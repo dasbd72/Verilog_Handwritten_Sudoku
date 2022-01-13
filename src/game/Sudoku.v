@@ -1,8 +1,8 @@
 module Sudoku_Solver #(
     parameter SIZE  = 81*4,
-    parameter SWAIT = 2'd0,
-    parameter SGAME = 2'd1,
-    parameter SFIN  = 2'd2,
+    parameter [1:0] SWAIT = 2'd0,
+    parameter [1:0] SGAME = 2'd1,
+    parameter [1:0] SFIN  = 2'd2,
     parameter CFIN  = 32'd500000000
     ) (
     input wire              clk,
@@ -64,8 +64,8 @@ module Sudoku_Solver #(
             count       <= 0;
             board       <= 0;
             board_blank <= 0;
-            data_reg    <= 0;
-            valid       <= 0;
+            data_reg    <= 4'b0;
+            valid       <= 1'b0;
         end else begin
             state       <= next_state;
             count       <= next_count;
@@ -155,7 +155,7 @@ module Sudoku_Solver #(
     /* data_reg */
     always @(*) begin
         case (state)
-            SWAIT: next_data_reg = 0;
+            SWAIT: next_data_reg = 4'b0;
             SGAME: begin
                 if(read) next_data_reg = data;
                 else next_data_reg = data_reg;
@@ -176,7 +176,7 @@ module Sudoku_Solver #(
         end else if (MOUSE_MIDDLE_up && board_blank[mouse_row*9+mouse_col]) begin
             row_next = mouse_row;
             col_next = mouse_col;
-            data_next = 0;
+            data_next = 4'b0;
         end else if (MOUSE_RIGHT_up && board_blank[mouse_row*9+mouse_col]) begin
             row_next = mouse_row;
             col_next = mouse_col;

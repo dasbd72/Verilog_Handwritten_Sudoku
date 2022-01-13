@@ -1,6 +1,6 @@
 `timescale 1ps/1ps
 module Output_Processor #(
-    parameter BITS = 32
+    parameter BITS = 6'd32
     ) (
     input [BITS*10 - 1:0] layer_2,
     output [3:0] number

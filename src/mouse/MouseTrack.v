@@ -6,12 +6,12 @@
     (  0, 160)(  0, 160)
  */
 module MouseDraw #(
-    parameter BLKSIZE   = 52,
-    parameter SCREENW   = 640,
-    parameter SCREENH   = 480,
-    parameter SWAIT     = 2'd0,
-    parameter SDRAW     = 2'd1,
-    parameter SFIN      = 2'd2,
+    parameter BLKSIZE   = 6'd52,
+    parameter SCREENW   = 10'd640,
+    parameter SCREENH   = 10'd480,
+    parameter [1:0] SWAIT     = 2'd0,
+    parameter [1:0] SDRAW     = 2'd1,
+    parameter [1:0] SFIN      = 2'd2,
     parameter TIME      = 31'd50000000
     ) (
     input   wire            clk,
@@ -56,12 +56,12 @@ module MouseDraw #(
     // ========================================
     always @(posedge clk) begin
         if(rst) begin
-            block_x             <= 0;
-            block_y             <= 0;
+            block_x             <= 4'b0;
+            block_y             <= 4'b0;
             track               <= 0;
             state               <= SWAIT;
             count               <= 0;
-            delayed_MOUSE_LEFT  <= 0;
+            delayed_MOUSE_LEFT  <= 1'b0;
         end else begin
             block_x             <= next_block_x;
             block_y             <= next_block_y;
@@ -118,54 +118,54 @@ module MouseDraw #(
     // ====================
     always @(*) begin
         if(SWAIT_2_SDRAW) begin
-            if (mouse_y_pos >= 428) next_block_y = 8;
-            else if (mouse_y_pos >= 374) next_block_y = 7;
-            else if (mouse_y_pos >= 320) next_block_y = 6;
-            else if (mouse_y_pos >= 268) next_block_y = 5;
-            else if (mouse_y_pos >= 214) next_block_y = 4;
-            else if (mouse_y_pos >= 160) next_block_y = 3;
-            else if (mouse_y_pos >= 108) next_block_y = 2;
-            else if (mouse_y_pos >= 54) next_block_y = 1;
-            else if (mouse_y_pos >= 0) next_block_y = 0;
+            if (mouse_y_pos >= 428) next_block_y        = 4'd8;
+            else if (mouse_y_pos >= 374) next_block_y   = 4'd7;
+            else if (mouse_y_pos >= 320) next_block_y   = 4'd6;
+            else if (mouse_y_pos >= 268) next_block_y   = 4'd5;
+            else if (mouse_y_pos >= 214) next_block_y   = 4'd4;
+            else if (mouse_y_pos >= 160) next_block_y   = 4'd3;
+            else if (mouse_y_pos >= 108) next_block_y   = 4'd2;
+            else if (mouse_y_pos >= 54) next_block_y    = 4'd1;
+            else if (mouse_y_pos >= 0) next_block_y     = 4'd0;
             else next_block_y = 9;
         end else next_block_y = block_y;
         if(SWAIT_2_SDRAW) begin
-            if (mouse_x_pos >= 588) next_block_x = 8;
-            else if (mouse_x_pos >= 534) next_block_x = 7;
-            else if (mouse_x_pos >= 480) next_block_x = 6;
-            else if (mouse_x_pos >= 428) next_block_x = 5;
-            else if (mouse_x_pos >= 374) next_block_x = 4;
-            else if (mouse_x_pos >= 320) next_block_x = 3;
-            else if (mouse_x_pos >= 268) next_block_x = 2;
-            else if (mouse_x_pos >= 214) next_block_x = 1;
-            else if (mouse_x_pos >= 160) next_block_x = 0;
+            if (mouse_x_pos >= 588) next_block_x      = 4'd8;
+            else if (mouse_x_pos >= 534) next_block_x = 4'd7;
+            else if (mouse_x_pos >= 480) next_block_x = 4'd6;
+            else if (mouse_x_pos >= 428) next_block_x = 4'd5;
+            else if (mouse_x_pos >= 374) next_block_x = 4'd4;
+            else if (mouse_x_pos >= 320) next_block_x = 4'd3;
+            else if (mouse_x_pos >= 268) next_block_x = 4'd2;
+            else if (mouse_x_pos >= 214) next_block_x = 4'd1;
+            else if (mouse_x_pos >= 160) next_block_x = 4'd0;
             else next_block_x = 9;
         end else next_block_x = block_x;
     end
     always @(*) begin
         case (block_y)
-            4'd8:    block_y_pos = 428;
-            4'd7:    block_y_pos = 374;
-            4'd6:    block_y_pos = 320;
-            4'd5:    block_y_pos = 268;
-            4'd4:    block_y_pos = 214;
-            4'd3:    block_y_pos = 160;
-            4'd2:    block_y_pos = 108;
-            4'd1:    block_y_pos = 54;
-            4'd0:    block_y_pos = 0;
-            default: block_y_pos = 0;
+            4'd8:    block_y_pos = 10'd428;
+            4'd7:    block_y_pos = 10'd374;
+            4'd6:    block_y_pos = 10'd320;
+            4'd5:    block_y_pos = 10'd268;
+            4'd4:    block_y_pos = 10'd214;
+            4'd3:    block_y_pos = 10'd160;
+            4'd2:    block_y_pos = 10'd108;
+            4'd1:    block_y_pos = 10'd54;
+            4'd0:    block_y_pos = 10'd0;
+            default: block_y_pos = 10'd0;
         endcase
         case (block_x)
-            4'd8:    block_x_pos = 588;
-            4'd7:    block_x_pos = 534;
-            4'd6:    block_x_pos = 480;
-            4'd5:    block_x_pos = 428;
-            4'd4:    block_x_pos = 374;
-            4'd3:    block_x_pos = 320;
-            4'd2:    block_x_pos = 268;
-            4'd1:    block_x_pos = 214;
-            4'd0:    block_x_pos = 160;
-            default: block_x_pos = 160;
+            4'd8:    block_x_pos = 10'd588;
+            4'd7:    block_x_pos = 10'd534;
+            4'd6:    block_x_pos = 10'd480;
+            4'd5:    block_x_pos = 10'd428;
+            4'd4:    block_x_pos = 10'd374;
+            4'd3:    block_x_pos = 10'd320;
+            4'd2:    block_x_pos = 10'd268;
+            4'd1:    block_x_pos = 10'd214;
+            4'd0:    block_x_pos = 10'd160;
+            default: block_x_pos = 10'd160;
         endcase
     end
     // ====================
@@ -182,7 +182,7 @@ module MouseDraw #(
                     else next_track = track;
                 end
             end
-            SFIN:   next_track = 0;
+            SFIN:   next_track = 2703'b0;
             default: next_track = track;
         endcase
     end
