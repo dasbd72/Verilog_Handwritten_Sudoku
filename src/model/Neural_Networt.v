@@ -33,16 +33,16 @@ module Neural_Network #(
     input wire  rst,
     input wire  start,
     input wire  [WIDTH0 - 1 : 0]         layer_0,
-    /* output reg  [BITSL*WIDTH1 - 1 : 0]   layer_1, */
+    // output reg  [BITSL*WIDTH1 - 1 : 0]   layer_1,
     output reg  [BITSL*WIDTH2 - 1 : 0]   layer_2,
 
-    /* output reg  [3:0] state, */
-    /* output wire [9:0] layer_1_col, */
-    /* output wire [9:0] layer_1_row, */
-    /* output wire [BITSL*WIDTH1 - 1 : 0] next_layer_1_kernel, */
-    /* output reg [15 : 0] mem_addr, */
-    /* output wire [11 : 0] mem_val, */
-    /* output wire [31 : 0] weight_val, */
+    // output reg  [3:0] state,
+    // output reg  [9:0] layer_1_col,
+    // output reg  [9:0] layer_1_row,
+    // output wire [BITSL*WIDTH1 - 1 : 0] next_layer_1_kernel,
+    // output reg  [15 : 0] mem_addr,
+    // output wire [11 : 0] mem_val,
+    // output wire [31 : 0] weight_val,
 
     output reg  finish
     );
@@ -52,32 +52,37 @@ module Neural_Network #(
     // ========================================
     wire clk_3;
 
-    reg [3:0] state;
-    reg [3:0] next_state;
-    reg [3:0] count;
-    reg [3:0] next_count;
+    reg  [3:0] state;
+    reg  [3:0] next_state;
+    reg  [3:0] count;
+    reg  [3:0] next_count;
 
     /* wire [28*28 - 1 : 0] layer_0; */
-    reg [BITSL*WIDTH1 - 1 : 0] layer_1;
+    reg  [BITSL*WIDTH1 - 1 : 0] layer_1;
     reg  [BITSL*WIDTH1 - 1 : 0] next_layer_1;
     wire [BITSL*WIDTH1 - 1 : 0] next_layer_1_kernel;
     wire [BITSL*WIDTH1 - 1 : 0] next_layer_1_bias;
     wire [BITSL*WIDTH1 - 1 : 0] next_layer_1_relu;
-    wire [9:0] layer_1_col;
-    wire [9:0] layer_1_row;
+    reg  [9:0] layer_1_col;
+    reg  [9:0] layer_1_row;
 
     /* reg [BITSL*WIDTH2 - 1 : 0] layer_2; */
     reg  [BITSL*WIDTH2 - 1 : 0] next_layer_2;
     wire [BITSL*WIDTH2 - 1 : 0] next_layer_2_kernel;
     wire [BITSL - 1 : 0]        weight_layer_product;
     wire [BITSL*WIDTH2 - 1 : 0] next_layer_2_bias;
-    wire [9:0] layer_2_col;
-    wire [9:0] layer_2_row;
+    reg  [9:0] layer_2_col;
+    reg  [9:0] layer_2_row;
 
-    reg [15 : 0] mem_addr;
-    reg [15 : 0] next_mem_addr;
+    reg  [15 : 0] mem_addr;
+    reg  [15 : 0] next_mem_addr;
     wire [11 : 0] mem_val;
     wire [31 : 0] weight_val;
+    reg  [31 : 0] weight_val_multiplier;
+    reg  [31 : 0] H2sL2Rm32s1;      //(HEIGHT2 - layer_2_row)*BITSL-1
+    reg  [31 : 0] W1s1sL1C;         // WIDTH1 - 1 - layer_1_col
+    reg  [31 : 0] H1s1sL1R;         // HEIGHT1 - 1 - layer_1_row
+    reg  [31 : 0] W2s1sL2C;         // WIDTH2 - 1 - layer_2_col
 
     /* reg  finish; */
     reg next_finish;
@@ -108,6 +113,18 @@ module Neural_Network #(
             finish      <= next_finish;
         end
     end
+    always @(posedge clk ) begin
+        /* First Layer */
+        layer_1_row <= (mem_addr) / WIDTH1;
+        layer_1_col <= (mem_addr) % WIDTH1;
+        layer_2_row <= (mem_addr - KER2_S) / WIDTH2;
+        layer_2_col <= (mem_addr - KER2_S) % WIDTH2;
+        /* Second Layer */
+        H2sL2Rm32s1 <= (HEIGHT2 - layer_2_row)*BITSL-1;
+        W1s1sL1C    <= WIDTH1 - 1 - layer_1_col;
+        H1s1sL1R    <= HEIGHT1 - 1 - layer_1_row;
+        W2s1sL2C    <= WIDTH2 - 1 - layer_2_col;
+    end
 
     // ========================================
     // Combinationals
@@ -136,20 +153,16 @@ module Neural_Network #(
         endcase
     end
     /* Calculation */
-    assign layer_1_row = (mem_addr - 2) / WIDTH1;
-    assign layer_1_col = (mem_addr - 2) - layer_1_row * WIDTH1;
-    assign layer_2_row = (mem_addr - 2 - KER2_S) / WIDTH2;
-    assign layer_2_col = (mem_addr - 2 - KER2_S) - layer_2_row * WIDTH2;
-    assign weight_layer_product = weight_val * layer_1[(HEIGHT2 - layer_2_row)*BITSL-1-:BITSL];
+    assign weight_layer_product = weight_val * layer_1[H2sL2Rm32s1-:BITSL];
     genvar i;
     generate
         for(i = 0; i < WIDTH1; i=i+1) begin
             assign next_layer_1_kernel[(i+1)*BITSL-1-:BITSL] = 
-                layer_1[(i+1)*BITSL-1-:BITSL] + ( (i == WIDTH1 - 1 - layer_1_col) ? weight_val * layer_0[HEIGHT1 - 1 - layer_1_row] : 32'b0 );
+                layer_1[(i+1)*BITSL-1-:BITSL] + ( (i == W1s1sL1C) ? weight_val * layer_0[H1s1sL1R] : 32'b0 );
         end
         for(i = 0; i < WIDTH1; i=i+1) begin
             assign next_layer_1_bias[(i+1)*BITSL-1-:BITSL] = 
-                layer_1[(i+1)*BITSL-1-:BITSL] + ( (i == WIDTH1 - 1 - layer_1_col) ? weight_val : 32'b0);
+                layer_1[(i+1)*BITSL-1-:BITSL] + ( (i == W1s1sL1C) ? weight_val : 32'b0);
         end
         for(i = 0; i < WIDTH1; i=i+1) begin
             assign next_layer_1_relu[(i+1)*BITSL-1-:BITSL] = 
@@ -157,11 +170,11 @@ module Neural_Network #(
         end
         for(i = 0; i < WIDTH2; i=i+1) begin
             assign next_layer_2_kernel[(i+1)*BITSL-1-:BITSL] = 
-                layer_2[(i+1)*BITSL-1-:BITSL] + (i == WIDTH2 - 1 - layer_2_col ? {{24{weight_layer_product[31]}}, weight_layer_product[31:8]} : 32'b0);
+                layer_2[(i+1)*BITSL-1-:BITSL] + (i == W2s1sL2C ? {{24{weight_layer_product[31]}}, weight_layer_product[31:8]} : 32'b0);
         end
         for(i = 0; i < WIDTH2; i=i+1) begin
             assign next_layer_2_bias[(i+1)*BITSL-1-:BITSL] = 
-                layer_2[(i+1)*BITSL-1-:BITSL] + (i == WIDTH2 - 1 - layer_2_col ? weight_val : 32'b0);
+                layer_2[(i+1)*BITSL-1-:BITSL] + (i == W2s1sL2C ? weight_val : 32'b0);
         end
     endgenerate
     /* layer 1 */
