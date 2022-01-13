@@ -11,15 +11,15 @@ module Stage (
         input receive_game_finish,
         output reg send_start,
         output reg send_connect,
-        output reg game_init,
+        output reg sudoku_start,
         output reg status,
         output reg [1:0] State
     );
 
     wire op_mouse;
-    OnePulse op1(clk, !MOUSE_LEFT, op_mouse);
+    OnePulse op1(clk, ~MOUSE_LEFT, op_mouse);
 
-    reg State_next;
+    reg [1:0] State_next;
     parameter [1:0] SMENU = 2'd0;
     parameter [1:0] SGAME = 2'd1;
     parameter [1:0] SOVER = 2'd2;
@@ -29,6 +29,7 @@ module Stage (
     parameter SLAVE = 1'b1;
 
     reg connecting;
+    reg next_sudoku_start;
     wire next_connecting = (State == SMENU) ? (receive_connect & send_connect_next) : connecting;
 
     always @(posedge clk, posedge reset) begin
@@ -38,12 +39,14 @@ module Stage (
             send_start <= 1'b0;
             status <= MASTER;
             connecting <= 1'b0;
+            sudoku_start <= 1'b0;
         end else begin
             State <= State_next;
             send_connect <= send_connect_next;
             send_start <= send_start_next;
             status <= status_next;
             connecting <= next_connecting;
+            sudoku_start <= next_sudoku_start;
         end
     end
 
@@ -54,21 +57,25 @@ module Stage (
                     if (mouse_on_start_button & op_mouse) begin
                         State_next = SGAME;
                         send_start_next = 1'b1;
+                        next_sudoku_start = 1'b1;
                     end else begin
                         State_next = SMENU;
                         send_start_next = 1'b0;
+                        next_sudoku_start = 1'b0;
                     end
                 end else begin
                     if (receive_start) begin
                         State_next = SGAME;
+                        next_sudoku_start = 1'b1;
                     end else begin
                         State_next = SMENU;
+                        next_sudoku_start = 1'b0;
                     end
                     send_start_next = 1'b0;
                 end
-                game_init = 1'b1;
             end
             SGAME: begin 
+                next_sudoku_start = 1'b0;
                 if (connecting) begin
                     if (game_finish | receive_game_finish) begin
                         State_next = SOVER;
@@ -82,21 +89,20 @@ module Stage (
                         State_next = SGAME;
                     end
                 end
-                game_init = 1'b0;
                 send_start_next = send_start;
             end
             SOVER: begin 
+                next_sudoku_start = 1'b0;
                 if (mouse_on_return_button & op_mouse) begin
                     State_next = SMENU;
                 end else begin
                     State_next = SOVER;
                 end
-                game_init = 1'b1;
                 send_start_next = 1'b0;
             end
             default: begin
+                next_sudoku_start = 1'b0;
                 State_next = SMENU;
-                game_init = 1'b1;
                 send_start_next = 1'b0;
             end
         endcase

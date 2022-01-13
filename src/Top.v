@@ -50,7 +50,7 @@ module TOP (
 
     wire start_predict, start_read;
     wire status; // Master:0 or slave:1
-    wire game_init;
+    wire sudoku_start;
     wire mouse_on_start_button;
     wire mouse_on_connect_button;
     wire mouse_on_return_button;
@@ -60,7 +60,7 @@ module TOP (
     wire [15:0] time_spent;
 
     assign an = 4'b1110;
-    assign pmod_4 = State == 1;
+    assign pmod_4 = State == 2'd1;
     Seven_seg sevenseg_inst(
         .status(status),
         .seg(seg)
@@ -81,7 +81,7 @@ module TOP (
         .send_connect(send_connect),
         .send_start(send_start),
         /* ======================= */
-        .game_init(game_init),
+        .sudoku_start(sudoku_start),
         .status(status),
         .State(State)
     );
@@ -147,7 +147,7 @@ module TOP (
     Sudoku_Solver sudoku_solver_inst(
         .clk(clk), 
         .reset(op_reset), 
-        .start(game_init), 
+        .start(sudoku_start), 
         .read(start_read), 
         .data(predicted_number),
         .row(block_y), 
@@ -226,7 +226,7 @@ module TOP (
 
     Timer timer_inst(
         .clk(clk),
-        .rst(game_init),
+        .rst(sudoku_start),
         .state(State),
         .time_spent(time_spent)
     );

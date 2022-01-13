@@ -21,8 +21,8 @@ module Timer (
 
     always @(posedge clk, posedge rst) begin
         if (rst) begin
-            time_spent <= 0;
-        end else if (state == 2'd2) begin
+            time_spent <= 16'b0;
+        end else if (state != 2'd1) begin
             time_spent <= time_spent;
         end else if (dclk) begin
             time_spent <= time_spent_next;
@@ -42,9 +42,9 @@ module Timer (
     always @(*) begin
         if (secondXX == 4'd5 && secondX == 4'd9) begin
             if (minuteX == 4'd9) begin
-                minuteX_next = 0;
+                minuteX_next = 4'b0;
             end else begin
-                minuteX_next = minuteX + 1;
+                minuteX_next = minuteX + 4'b1;
             end
         end else begin
             minuteX_next = minuteX;
@@ -54,9 +54,9 @@ module Timer (
     always @(*) begin
         if (secondX == 4'd9) begin
             if (secondXX == 4'd5) begin
-                secondXX_next = 0;
+                secondXX_next = 4'b0;
             end else begin
-                secondXX_next = secondXX + 1;
+                secondXX_next = secondXX + 4'b1;
             end
         end else begin
             secondXX_next = secondXX;
@@ -65,9 +65,9 @@ module Timer (
 
     always @(*) begin
         if (secondX == 4'd9) begin
-            secondX_next = 0;
+            secondX_next = 4'b0;
         end else begin
-            secondX_next = secondX + 1;
+            secondX_next = secondX + 4'b1;
         end
     end
     

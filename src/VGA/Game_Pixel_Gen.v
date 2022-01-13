@@ -13,7 +13,7 @@ module Game_Pixel_Gen(
     );
 
 	parameter SIZE = 52;
-    parameter [9:0] blk_pos [8:0] = {0, 53, 106, 161, 214, 267, 322, 375, 428};
+    parameter [9:0] blk_pos [8:0] = {10'd0, 10'd53, 10'd106, 10'd161, 10'd214, 10'd267, 10'd322, 10'd375, 10'd428};
 
 	always @(*) begin
 		case (game_mem)
@@ -38,12 +38,12 @@ module Game_Pixel_Gen(
 	assign enable_black = enable_num_display & board_blank[row*9+col];
 	assign enable_red = enable_num_display & !board_blank[row*9+col];
 
-	assign enable_time_game[3] = (h_cnt >= 500 & h_cnt < 552 & v_cnt >= 200 & v_cnt < 252);
-	assign enable_time_game[2] = (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 200 & v_cnt < 252);
-	assign enable_time_game[1] = (h_cnt >= 500 & h_cnt < 552 & v_cnt >= 260 & v_cnt < 312);
-	assign enable_time_game[0] = (h_cnt >= 560 & h_cnt < 612 & v_cnt >= 260 & v_cnt < 312);
+	assign enable_time_game[3] = (h_cnt >= 10'd500 & h_cnt < 10'd552 & v_cnt >= 10'd200 & v_cnt < 10'd252);
+	assign enable_time_game[2] = (h_cnt >= 10'd560 & h_cnt < 10'd612 & v_cnt >= 10'd200 & v_cnt < 10'd252);
+	assign enable_time_game[1] = (h_cnt >= 10'd500 & h_cnt < 10'd552 & v_cnt >= 10'd260 & v_cnt < 10'd312);
+	assign enable_time_game[0] = (h_cnt >= 10'd560 & h_cnt < 10'd612 & v_cnt >= 10'd260 & v_cnt < 10'd312);
 	
-    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
+    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 10'd320 * (v_cnt>>1)) % 76800;
 	wire [2:0] game_mem;
 
 	assign display_num = board[(row*9+col)*4+3-:4];
@@ -52,13 +52,13 @@ module Game_Pixel_Gen(
 		if (enable_num_display) begin
 			pixel_num_addr = (v_cnt-blk_pos[row]) * SIZE + (h_cnt-blk_pos[col]);
 		end else if (enable_time_game[3]) begin
-			pixel_num_addr = (v_cnt-200) * SIZE + (h_cnt-500);
+			pixel_num_addr = (v_cnt-10'd200) * SIZE + (h_cnt-10'd500);
 		end else if (enable_time_game[2]) begin
-			pixel_num_addr = (v_cnt-200) * SIZE + (h_cnt-560);
+			pixel_num_addr = (v_cnt-10'd200) * SIZE + (h_cnt-10'd560);
 		end else if (enable_time_game[1]) begin
-			pixel_num_addr = (v_cnt-260) * SIZE + (h_cnt-500);
+			pixel_num_addr = (v_cnt-10'd260) * SIZE + (h_cnt-10'd500);
 		end else if (enable_time_game[0]) begin
-			pixel_num_addr = (v_cnt-260) * SIZE + (h_cnt-560);
+			pixel_num_addr = (v_cnt-10'd260) * SIZE + (h_cnt-10'd560);
 		end else begin
 			pixel_num_addr = 0;
 		end

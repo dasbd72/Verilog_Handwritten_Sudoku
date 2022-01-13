@@ -6,9 +6,9 @@
     (  0, 160)(  0, 160)
  */
 module MouseDraw #(
-    parameter BLKSIZE   = 6'd52,
-    parameter SCREENW   = 10'd640,
-    parameter SCREENH   = 10'd480,
+    parameter BLKSIZE   = 52,
+    parameter SCREENW   = 640,
+    parameter SCREENH   = 480,
     parameter [1:0] SWAIT     = 2'd0,
     parameter [1:0] SDRAW     = 2'd1,
     parameter [1:0] SFIN      = 2'd2,
