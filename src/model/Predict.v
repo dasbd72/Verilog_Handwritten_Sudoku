@@ -81,17 +81,3 @@ module Predict #(
         endcase
     end
 endmodule
-
-module div(clk, dclk);
-	input clk;
-	output dclk;
-	reg [21:0] num;
-	wire [21:0] next_num;
-
-	always @(posedge clk) begin
-		num <= next_num;
-	end
-
-	assign next_num = num + 1'b1;
-	assign dclk = num[1];
-endmodule

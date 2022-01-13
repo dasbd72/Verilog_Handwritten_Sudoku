@@ -49,81 +49,61 @@ module Game_Pixel_Gen(
 
     Game_Mem_Gen blk_mem_gen_game(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_background_addr),
-		.dina(0),
 		.douta(game_mem)
 	); 
 
 	Num1_Mem_Gen num1_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[1])
 	);
 
 	Num2_Mem_Gen num2_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[2])
 	);
 
 	Num3_Mem_Gen num3_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[3])
 	);
 
 	Num4_Mem_Gen num4_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[4])
 	);
 
 	Num5_Mem_Gen num5_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[5])
 	);
 
 	Num6_Mem_Gen num6_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[6])
 	);
 
 	Num7_Mem_Gen num7_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[7])
 	);
 
 	Num8_Mem_Gen num8_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[8])
 	);
 
 	Num9_Mem_Gen num9_mem_gen_inst(
 		.clka(clka),
-		.wea(0),
 		.addra(pixel_num_addr),
-		.dina(0),
 		.douta(num_mem[9])
 	);
 

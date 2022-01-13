@@ -17,7 +17,7 @@ module MouseTrackDisplay #(
 
     wire [9:0] xcnt, ycnt; 
     wire valid;
-    // wire [2703:0] track_2_pixel;
+    wire [2703:0] track_adjust;
 
     assign {red_out, green_out, blue_out} = 12'h0;
     assign xcnt = W - 1 - hcount;
@@ -27,33 +27,20 @@ module MouseTrackDisplay #(
                     (ycnt < block_y_pos + BSIZE) &&
                     (xcnt < block_x_pos + BSIZE));
     assign enable_track_display_out = ~valid ? 0 : 
-                                    track[(ycnt - block_y_pos)*BSIZE + xcnt - block_x_pos];
+                                    track_adjust[(ycnt - block_y_pos)*BSIZE + xcnt - block_x_pos];
 
-    // genvar row, col;
-    // generate
-    //     for(row = 0; row < BSIZE; row=row+1) begin
-    //         for(col=0; col < BSIZE; col=col+1) begin
-    //             if (row < BSIZE - 1 && col < BSIZE - 1) begin
-    //                 assign track_2_pixel[row*BSIZE + col] = {
-    //                     track[(row)*BSIZE + (col)] ||
-    //                     track[(row)*BSIZE + (col+1)] ||
-    //                     track[(row+1)*BSIZE + (col)] ||
-    //                     track[(row+1)*BSIZE + (col+1)]
-    //                 };
-    //             end else if (row < BSIZE - 1) begin
-    //                 assign track_2_pixel[row*BSIZE + col] = {
-    //                     track[(row)*BSIZE + (col)] ||
-    //                     track[(row+1)*BSIZE + (col)]
-    //                 };
-    //             end else if (col < BSIZE - 1) begin
-    //                 assign track_2_pixel[row*BSIZE + col] = {
-    //                     track[(row)*BSIZE + (col)] ||
-    //                     track[(row)*BSIZE + (col+1)]
-    //                 };
-    //             end else begin
-    //                 assign track_2_pixel[(row)*BSIZE + (col)] = track[(row)*BSIZE + (col)];
-    //             end
-    //         end
-    //     end
-    // endgenerate
+    genvar row, col;
+    generate
+        for(row = 1; row < BSIZE-1; row=row+1) begin
+            for(col = 1; col < BSIZE-1; col=col+1) begin
+                assign track_adjust[row*BSIZE + col] = {(
+                        track[(row)*BSIZE + (col)]    |
+                        track[(row+1)*BSIZE + (col)]) | (
+                        track[(row-1)*BSIZE + (col)]  |
+                        track[(row)*BSIZE + (col+1)]) |
+                        track[(row)*BSIZE + (col-1)]
+                    };
+            end
+        end
+    endgenerate
 endmodule
