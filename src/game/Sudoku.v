@@ -1,9 +1,8 @@
 module Sudoku_Solver #(
     parameter SIZE  = 81*4,
     parameter SWAIT = 2'd0,
-    parameter SCAPT = 2'd1,
-    parameter SGAME = 2'd2,
-    parameter SFIN  = 2'd3,
+    parameter SGAME = 2'd1,
+    parameter SFIN  = 2'd2,
     parameter CFIN  = 32'd500000000
     ) (
     input wire              clk,
@@ -94,10 +93,9 @@ module Sudoku_Solver #(
     always @(*) begin
         case (state)
             SWAIT: begin
-                if(start)           next_state = SCAPT;
+                if(start)           next_state = SGAME;
                 else                next_state = state;
             end
-            SCAPT:                  next_state = SGAME;
             SGAME: begin
                 if(board_correct)   next_state = SFIN;
                 else                next_state = state;
@@ -132,9 +130,14 @@ module Sudoku_Solver #(
     endgenerate
     always @(*) begin
         case (state)
-            SWAIT: next_board          = 0;
-            SCAPT: next_board          = init_board;
-            SGAME: next_board          = next_board_game;
+            SWAIT: begin
+                if(start) next_board = init_board;
+                else      next_board = 0;
+            end
+            SGAME: begin
+                if(board_correct) next_board = board;
+                else              next_board = next_board_game;
+            end
             SFIN:  next_board          = board;
             default: next_board        = board;
         endcase
@@ -142,8 +145,10 @@ module Sudoku_Solver #(
     /* board blank */
     always @(*) begin
         case (state)
-            SWAIT:      next_board_blank    = 0;
-            SCAPT:      next_board_blank    = init_board_blank;
+            SWAIT: begin
+                if(start) next_board_blank = init_board_blank;
+                else      next_board_blank = 0;
+            end
             default:    next_board_blank    = board_blank;
         endcase
     end
