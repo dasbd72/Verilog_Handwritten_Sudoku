@@ -31,9 +31,12 @@ module MouseTrackDisplay #(
 
     genvar row, col;
     generate
-        for(row = 1; row < BSIZE-1; row=row+1) begin
-            for(col = 1; col < BSIZE-1; col=col+1) begin
-                assign track_adjust[row*BSIZE + col] = {(
+        for(row = 0; row < BSIZE; row=row+1) begin
+            for(col = 0; col < BSIZE; col=col+1) begin
+                if(row == 0 || row == BSIZE-1 || col == 0 || col == BSIZE-1)
+                    assign track_adjust[row*BSIZE + col] = track[(row)*BSIZE + (col)];
+                else 
+                    assign track_adjust[row*BSIZE + col] = {(
                         track[(row)*BSIZE + (col)]    |
                         track[(row+1)*BSIZE + (col)]) | (
                         track[(row-1)*BSIZE + (col)]  |

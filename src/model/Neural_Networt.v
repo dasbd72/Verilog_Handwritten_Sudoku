@@ -79,10 +79,10 @@ module Neural_Network #(
     wire [11 : 0] mem_val;
     wire [31 : 0] weight_val;
     reg  [31 : 0] weight_val_multiplier;
-    reg  [31 : 0] H2sL2Rm32s1;      //(HEIGHT2 - layer_2_row)*BITSL-1
-    reg  [31 : 0] W1s1sL1C;         // WIDTH1 - 1 - layer_1_col
-    reg  [31 : 0] H1s1sL1R;         // HEIGHT1 - 1 - layer_1_row
-    reg  [31 : 0] W2s1sL2C;         // WIDTH2 - 1 - layer_2_col
+    reg  [16 : 0] H2sL2Rm32s1;      //(HEIGHT2 - layer_2_row)*BITSL-1
+    reg  [6 : 0]  W1s1sL1C;         // WIDTH1 - 1 - layer_1_col
+    reg  [9 : 0]  H1s1sL1R;         // HEIGHT1 - 1 - layer_1_row
+    reg  [3 : 0]  W2s1sL2C;         // WIDTH2 - 1 - layer_2_col
 
     /* reg  finish; */
     reg next_finish;
