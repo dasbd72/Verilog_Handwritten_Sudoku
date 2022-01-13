@@ -33,7 +33,9 @@ module MouseDraw #(
     reg  [31:0]     next_count;
 
     wire [9:0]      mouse_x_pos;
+    // reg  [9:0]      prev_mouse_x_pos;
     wire [9:0]      mouse_y_pos;
+    // reg  [9:0]      prev_mouse_y_pos;
     reg  [3:0]      next_block_x;
     reg  [3:0]      next_block_y;
     reg  [2703:0]   next_track;
@@ -74,11 +76,13 @@ module MouseDraw #(
     // ========================================
     always @(posedge clk ) begin
         mouse_track_pos <= ((mouse_y_pos - block_y_pos) * BLKSIZE + (mouse_x_pos - block_x_pos));
-        track_recording  =  MOUSE_LEFT && (
+        track_recording <=  MOUSE_LEFT && (
                             mouse_x_pos >= block_x_pos &&
                             mouse_y_pos >= block_y_pos &&
                             mouse_x_pos < block_x_pos + BLKSIZE &&
                             mouse_y_pos < block_y_pos + BLKSIZE );
+        // prev_mouse_x_pos <= mouse_x_pos;
+        // prev_mouse_y_pos <= mouse_y_pos;
     end
 
     // ========================================
