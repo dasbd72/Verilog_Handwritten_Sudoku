@@ -38,15 +38,20 @@ module MouseDraw #(
     reg  [3:0]      next_block_y;
     reg  [2703:0]   next_track;
 
-    reg             next_valid;
+    /* Mouse Signal */
     reg             delayed_MOUSE_LEFT;
     wire            MOUSE_LEFT_up;
 
+    /* Utilities */
     wire            SWAIT_2_SDRAW;
     wire            SDRAW_2_SFIN;
     wire            mouse_valid;
-    wire            track_recording;
+    reg             track_recording;
+    reg  [31:0]     mouse_track_pos;
 
+    // ========================================
+    // DFFS
+    // ========================================
     always @(posedge clk) begin
         if(rst) begin
             block_x             <= 0;
@@ -64,19 +69,17 @@ module MouseDraw #(
             delayed_MOUSE_LEFT  <= MOUSE_LEFT;
         end
     end
-    
-    assign mouse_x_pos      = SCREENW - 1 - MOUSE_X_POS;
-    assign mouse_y_pos      = SCREENH - 1 - MOUSE_Y_POS;
-    assign mouse_valid      = mouse_x_pos >= 160;
-    assign track_recording  =   MOUSE_LEFT && (
-                                mouse_x_pos >= block_x_pos &&
-                                mouse_y_pos >= block_y_pos &&
-                                mouse_x_pos < block_x_pos + BLKSIZE &&
-                                mouse_y_pos < block_y_pos + BLKSIZE );
-    assign SWAIT_2_SDRAW    = (state == SWAIT) && (MOUSE_LEFT && mouse_valid);
-    assign SDRAW_2_SFIN     =  (state == SDRAW) && (count == TIME);
-    assign MOUSE_LEFT_up    = delayed_MOUSE_LEFT & ~MOUSE_LEFT;
-    assign valid            = (state == SFIN);
+    // ========================================
+    // Delayed
+    // ========================================
+    always @(posedge clk ) begin
+        mouse_track_pos <= ((mouse_y_pos - block_y_pos) * BLKSIZE + (mouse_x_pos - block_x_pos));
+        track_recording  =  MOUSE_LEFT && (
+                            mouse_x_pos >= block_x_pos &&
+                            mouse_y_pos >= block_y_pos &&
+                            mouse_x_pos < block_x_pos + BLKSIZE &&
+                            mouse_y_pos < block_y_pos + BLKSIZE );
+    end
 
     // ========================================
     // State Change
@@ -95,7 +98,20 @@ module MouseDraw #(
             default: next_state = state;
         endcase
     end
-    /* Block Calculation */
+    
+    // ========================================
+    // Combinationals
+    // ========================================
+    assign mouse_x_pos      = SCREENW - 1 - MOUSE_X_POS;
+    assign mouse_y_pos      = SCREENH - 1 - MOUSE_Y_POS;
+    assign mouse_valid      = mouse_x_pos >= 160;
+    assign SWAIT_2_SDRAW    = (state == SWAIT) && (MOUSE_LEFT && mouse_valid);
+    assign SDRAW_2_SFIN     =  (state == SDRAW) && (count == TIME);
+    assign MOUSE_LEFT_up    = delayed_MOUSE_LEFT & ~MOUSE_LEFT;
+    assign valid            = (state == SFIN);
+    // ====================
+    // Block Calculation
+    // ====================
     always @(*) begin
         if(SWAIT_2_SDRAW) begin
             if (mouse_y_pos >= 428) next_block_y = 8;
@@ -121,32 +137,36 @@ module MouseDraw #(
             else if (mouse_x_pos >= 160) next_block_x = 0;
             else next_block_x = 9;
         end else next_block_x = block_x;
-
-        if (block_y == 8) block_y_pos = 428;
-        else if (block_y == 7) block_y_pos = 374;
-        else if (block_y == 6) block_y_pos = 320;
-        else if (block_y == 5) block_y_pos = 268;
-        else if (block_y == 4) block_y_pos = 214;
-        else if (block_y == 3) block_y_pos = 160;
-        else if (block_y == 2) block_y_pos = 108;
-        else if (block_y == 1) block_y_pos = 54;
-        else if (block_y == 0) block_y_pos = 0;
-        else block_y_pos = 0;
-
-        if (block_x == 8) block_x_pos = 588;
-        else if (block_x == 7) block_x_pos = 534;
-        else if (block_x == 6) block_x_pos = 480;
-        else if (block_x == 5) block_x_pos = 428;
-        else if (block_x == 4) block_x_pos = 374;
-        else if (block_x == 3) block_x_pos = 320;
-        else if (block_x == 2) block_x_pos = 268;
-        else if (block_x == 1) block_x_pos = 214;
-        else if (block_x == 0) block_x_pos = 160;
-        else block_x_pos = 0;
     end
-    // ========================================
+    always @(*) begin
+        case (block_y)
+            4'd8:    block_y_pos = 428;
+            4'd7:    block_y_pos = 374;
+            4'd6:    block_y_pos = 320;
+            4'd5:    block_y_pos = 268;
+            4'd4:    block_y_pos = 214;
+            4'd3:    block_y_pos = 160;
+            4'd2:    block_y_pos = 108;
+            4'd1:    block_y_pos = 54;
+            4'd0:    block_y_pos = 0;
+            default: block_y_pos = 0;
+        endcase
+        case (block_x)
+            4'd8:    block_x_pos = 588;
+            4'd7:    block_x_pos = 534;
+            4'd6:    block_x_pos = 480;
+            4'd5:    block_x_pos = 428;
+            4'd4:    block_x_pos = 374;
+            4'd3:    block_x_pos = 320;
+            4'd2:    block_x_pos = 268;
+            4'd1:    block_x_pos = 214;
+            4'd0:    block_x_pos = 160;
+            default: block_x_pos = 160;
+        endcase
+    end
+    // ====================
     // Track Calculation
-    // ========================================
+    // ====================
     always @(*) begin
         case (state)
             SWAIT: next_track = 2703'b0;
@@ -154,7 +174,7 @@ module MouseDraw #(
                 if(SDRAW_2_SFIN) begin
                     next_track = track;
                 end else begin
-                    if(track_recording) next_track = track | (1 << ((mouse_y_pos - block_y_pos) * BLKSIZE + (mouse_x_pos - block_x_pos))); 
+                    if(track_recording) next_track = track | (1 << mouse_track_pos); 
                     else next_track = track;
                 end
             end
@@ -163,9 +183,9 @@ module MouseDraw #(
         endcase
     end
 
-    // ========================================
+    // ====================
     // Counting Mouse Up time
-    // ========================================
+    // ====================
     always @(*) begin
         case (state)
             SWAIT: next_count = 0;
