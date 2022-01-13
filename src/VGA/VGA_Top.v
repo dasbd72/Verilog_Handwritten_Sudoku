@@ -2,7 +2,7 @@ module Vga_Top(
 	input clka,
 	input rst,
 	input [1:0] state,
-	input connected,
+	input connecting,
 	input MOUSE_LEFT,
 	input enable_mouse_display,
 	input enable_track_display_out,
@@ -24,13 +24,17 @@ module Vga_Top(
 	wire valid;
 	reg [11:0] pixel;
 	wire [11:0] pixel_out;
+
+	parameter [1:0] SMENU = 2'd0;
+	parameter [1:0] SGAME = 2'd1;
+	parameter [1:0] SOVER = 2'd2;
 	
 	assign {vgaRed, vgaGreen, vgaBlue} = (valid) ? pixel : 12'h0;
 
 	always @(*) begin
 		if (enable_mouse_display) begin
 			pixel = mouse_pixel;
-		end else if (enable_track_display_out) begin
+		end else if (enable_track_display_out & state == SGAME) begin
 			pixel = 12'h000;
 		end else begin
 			pixel = pixel_out;
@@ -42,7 +46,7 @@ module Vga_Top(
 		.v_cnt(v_cnt),
 		.clka(clka),
 		.state(state),
-		.connected(connected),
+		.connecting(connecting),
 		.MOUSE_LEFT(MOUSE_LEFT),
 		.mouse_on_start_button(mouse_on_start_button),
 		.mouse_on_connect_button(mouse_on_connect_button),

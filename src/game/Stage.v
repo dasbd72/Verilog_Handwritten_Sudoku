@@ -11,16 +11,16 @@ module Stage (
         input receive_game_finish,
         output reg send_start,
         output reg send_connect,
-        output reg connecting,
+        output connecting,
         output reg game_init,
         output reg status,
-        output [1:0] State
+        output reg [1:0] State
     );
 
     wire op_mouse;
     OnePulse op1(clk, !MOUSE_LEFT, op_mouse);
 
-    reg [1:0] State, State_next;
+    reg State_next;
     parameter [1:0] SMENU = 2'd0;
     parameter [1:0] SGAME = 2'd1;
     parameter [1:0] SOVER = 2'd2;
@@ -29,18 +29,18 @@ module Stage (
     parameter MASTER = 0;
     parameter SLAVE = 1;
 
+    assign connecting = receive_connect & send_connect;
+
     always @(posedge clk, posedge reset) begin
         if (reset) begin
             State <= SMENU;
             send_connect <= 0;
             send_start <= 0;
-            connecting <= 0;
             status <= MASTER;
         end else begin
             State <= State_next;
             send_connect <= send_connect_next;
             send_start <= send_start_next;
-            connecting <= send_connect_next & receive_connect;
             status <= status_next;
         end
     end
@@ -81,7 +81,7 @@ module Stage (
                     end
                 end
                 game_init = 0;
-                send_start_next = send_start_next;
+                send_start_next = send_start;
             end
             SOVER: begin 
                 if (mouse_on_return_button & op_mouse) begin
@@ -101,16 +101,13 @@ module Stage (
     end
 
     always @(*) begin
-        if (State == SMENU & !send_connect) begin
+        if (mouse_on_connect_button & op_mouse) begin
             if (receive_connect) begin
                 status_next = SLAVE;
                 send_connect_next = 1;
-            end else if (mouse_on_connect_button && op_mouse)begin
+            end else begin
                 status_next = MASTER;
                 send_connect_next = 1;
-            end else begin
-                status_next = status;
-                send_connect_next = send_connect;
             end
         end else begin
             status_next = status;

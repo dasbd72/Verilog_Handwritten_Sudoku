@@ -3,7 +3,7 @@ module Pixel_Gen (
     input [9:0] h_cnt,
 	input [9:0] v_cnt, 	
     input [1:0] state,
-	input connected,
+	input connecting,
 	input MOUSE_LEFT,
 	input mouse_on_start_button,
 	input mouse_on_connect_button,
@@ -26,6 +26,7 @@ module Pixel_Gen (
 			SMENU: pixel_out = pixel_menu_out;
 			SGAME: pixel_out = pixel_game_out;
 			SOVER: pixel_out = pixel_over_out;
+			default: pixel_out = 12'h000;
 		endcase 
 	end
 
@@ -43,7 +44,7 @@ module Pixel_Gen (
 		.clka(clka),
 		.h_cnt(h_cnt),
 		.v_cnt(v_cnt),
-		.connected(connected),
+		.connecting(connecting),
 		.MOUSE_LEFT(MOUSE_LEFT),
 		.mouse_on_start_button(mouse_on_start_button),
 		.mouse_on_connect_button(mouse_on_connect_button),

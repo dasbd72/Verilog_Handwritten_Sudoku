@@ -2,7 +2,7 @@ module Menu_Pixel_Gen (
     input clka,
     input [9:0] h_cnt,
     input [9:0] v_cnt,
-    input connected,
+    input connecting,
     input MOUSE_LEFT,
     input mouse_on_start_button,
     input mouse_on_connect_button,
@@ -34,7 +34,7 @@ module Menu_Pixel_Gen (
                         pixel_menu_out = BLACK;
                     end    
                 end else begin // Connect button
-                    if (connected) begin
+                    if (connecting) begin
                         pixel_menu_out = isCONNECT;
                     end else if (mouse_on_connect_button) begin
                         if (MOUSE_LEFT) begin

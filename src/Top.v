@@ -21,13 +21,6 @@ module TOP (
 	output pmod_4
     );
 
-    assign LED[6] = status;
-    assign LED[5] = receive_connect;
-    assign LED[4] = receive_start;
-    assign LED[3] = receive_game_finish;
-    assign LED[2] = send_connect;
-    assign LED[1] = send_start;
-    assign LED[0] = send_game_finish;
 
     wire db_reset, op_reset;
     Debounce db0(clk, btnU, db_reset);
@@ -63,6 +56,14 @@ module TOP (
 
     wire [1:0] State;
     wire [3:0] predicted_number;
+    
+    assign LED[6] = status;
+    assign LED[5] = receive_connect;
+    assign LED[4] = receive_start;
+    assign LED[3] = receive_game_finish;
+    assign LED[2] = send_connect;
+    assign LED[1] = send_start;
+    assign LED[0] = send_game_finish;
 
     Stage stage_inst(
         .clk(clk),
@@ -110,7 +111,7 @@ module TOP (
         .clka(clka),
         .rst(op_reset),
         .state(State),
-        .connected(connecting),
+        .connecting(connecting),
         .MOUSE_LEFT(MOUSE_LEFT),
         .enable_mouse_display(enable_mouse_display),
         .enable_track_display_out(enable_track_display_out),
