@@ -1,16 +1,16 @@
 module Music (
 	input [7:0] ibeatNum,	
-	output reg [31:0] tone
+	output reg [23:0] tone
 	);
 
-	localparam f1 = 32'd262; // C4 
-	localparam f2 = 32'd294; // D4
-	localparam f3 = 32'd330; // E4
-	localparam f4 = 32'd349; // F4
-	localparam f5 = 32'd392; // G4
-	localparam f6 = 32'd440; // A4
-	localparam f7 = 32'd494; // B4
-	localparam Silence = 32'd20000; // Silence
+	localparam f1 = 27'd262; // C4 
+	localparam f2 = 27'd294; // D4
+	localparam f3 = 27'd330; // E4
+	localparam f4 = 27'd349; // F4
+	localparam f5 = 27'd392; // G4
+	localparam f6 = 27'd440; // A4
+	localparam f7 = 27'd494; // B4
+	localparam Silence = 27'd20000; // Silence
 
 	always @(*) begin
 		case (ibeatNum)

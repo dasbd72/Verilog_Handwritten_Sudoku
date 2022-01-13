@@ -59,6 +59,7 @@ module TOP (
     wire [3:0] predicted_number;
 
     assign an = 4'b1110;
+    assign pmod_4 = State == 1;
     Seven_seg sevenseg_inst(
         .status(status),
         .seg(seg)
@@ -218,8 +219,7 @@ module TOP (
         .clk(clk),
         .reset(op_reset),
         .pmod_1(pmod_1),
-        .pmod_2(pmod_2),
-        .pmod_4(pmod_4)
+        .pmod_2(pmod_2)
     );
 
 endmodule

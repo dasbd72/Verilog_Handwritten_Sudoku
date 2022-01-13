@@ -1,20 +1,18 @@
 module Audio (
 	input clk,
 	input reset,
-    input [31:0] BEAT_FREQ,
+    input [27:0] BEAT_FREQ,
 	output pmod_1,
-	output pmod_2,
-	output pmod_4
+	output pmod_2
 	);
 
 	parameter DUTY_BEST = 10'd512;
 
-	wire [31:0] freq;
+	wire [27:0] freq;
 	wire [7:0] ibeatNum;
 	wire beatFreq;
 
 	assign pmod_2 = 1'd1;	// no gain(6dB)
-	assign pmod_4 = 1'd1;	// turn-on
 
 	PWM_gen btSpeedGen ( 
         .clk(clk), 
