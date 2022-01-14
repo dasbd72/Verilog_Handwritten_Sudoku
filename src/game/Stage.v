@@ -32,7 +32,7 @@ module Stage (
     reg next_sudoku_start;
     wire next_connecting = (State == SMENU) ? (receive_connect & send_connect_next) : connecting;
 
-    always @(posedge clk, posedge reset) begin
+    always @(posedge clk) begin
         if (reset) begin
             State <= SMENU;
             send_connect <= 1'b0;

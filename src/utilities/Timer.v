@@ -19,7 +19,7 @@ module Timer (
         .dclk(dclk)
     );
 
-    always @(posedge clk, posedge rst) begin
+    always @(posedge clk) begin
         if (rst) begin
             time_spent <= 16'b0;
         end else if (state != 2'd1) begin

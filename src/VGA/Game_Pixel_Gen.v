@@ -12,16 +12,16 @@ module Game_Pixel_Gen(
         output reg [11:0] pixel_game_out
     );
 
-	parameter SIZE = 52;
+	parameter SIZE = 6'd52;
     parameter [9:0] blk_pos [8:0] = {10'd0, 10'd53, 10'd106, 10'd161, 10'd214, 10'd267, 10'd322, 10'd375, 10'd428};
 
 	always @(*) begin
 		case (game_mem)
-			0: pixel_game_out = 12'h23A;
-			1: pixel_game_out = 12'h019; 
-			2: pixel_game_out = 12'hD99;
-			3: pixel_game_out = 12'hC77;
-			4: pixel_game_out = 12'h038;
+			3'd0: pixel_game_out = 12'h23A;
+			3'd1: pixel_game_out = 12'h019; 
+			3'd2: pixel_game_out = 12'hD99;
+			3'd3: pixel_game_out = 12'hC77;
+			3'd4: pixel_game_out = 12'h038;
 			default: pixel_game_out = 12'h000;
 		endcase
 	end
@@ -34,7 +34,7 @@ module Game_Pixel_Gen(
 	Cnt_to_Row_Col CtR_inst(v_cnt, row);
 	Cnt_to_Row_Col CtC_inst(h_cnt, col);
 
-	wire enable_num_display = (h_cnt < 480) & board[(row*9+col)*4+3-:4] != 0;
+	wire enable_num_display = (h_cnt < 10'd480) & board[(row*9+col)*4+3-:4] != 0;
 	assign enable_black = enable_num_display & board_blank[row*9+col];
 	assign enable_red = enable_num_display & !board_blank[row*9+col];
 

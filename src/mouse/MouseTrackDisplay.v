@@ -1,7 +1,7 @@
 module MouseTrackDisplay #(
-    parameter H = 480,
-    parameter W = 640,
-    parameter BSIZE = 52
+    parameter H = 10'd480,
+    parameter W = 10'd640,
+    parameter BSIZE = 10'd52
     )(
     input  clk,
     input  [9 : 0] block_x_pos,
