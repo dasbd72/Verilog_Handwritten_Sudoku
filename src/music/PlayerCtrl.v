@@ -3,7 +3,7 @@ module PlayerCtrl (
 	input reset,
 	output reg [7:0] ibeat
 	);
-	parameter BEATLEAGTH = 59;
+	parameter BEATLEAGTH = 6'd59;
 
 	always @(posedge clk, posedge reset) begin
 		if (reset)

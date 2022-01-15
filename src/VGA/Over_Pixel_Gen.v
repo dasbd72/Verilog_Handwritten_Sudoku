@@ -14,25 +14,25 @@ module Over_Pixel_Gen (
     parameter TOUCH = 12'h32E;
     parameter CLICK = 12'hDD2;
 
-    parameter SIZE = 52;
+    parameter SIZE = 10'd52;
 
-    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
+    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 10'd320 * (v_cnt>>1)) % 76800;
     wire [1:0] over_mem;
 
-    assign enable_time_over[3] = (h_cnt >= 133 & h_cnt < 185 & v_cnt >= 210 & v_cnt < 262);
-	assign enable_time_over[2] = (h_cnt >= 186 & h_cnt < 238 & v_cnt >= 210 & v_cnt < 262);
-	assign enable_time_over[1] = (h_cnt >= 242 & h_cnt < 294 & v_cnt >= 210 & v_cnt < 262);
-	assign enable_time_over[0] = (h_cnt >= 295 & h_cnt < 347 & v_cnt >= 210 & v_cnt < 262);
+    assign enable_time_over[3] = (h_cnt >= 10'd213 & h_cnt < 10'd265 & v_cnt >= 10'd210 & v_cnt < 10'd262);
+	assign enable_time_over[2] = (h_cnt >= 10'd266 & h_cnt < 10'd318 & v_cnt >= 10'd210 & v_cnt < 10'd262);
+	assign enable_time_over[1] = (h_cnt >= 10'd322 & h_cnt < 10'd374 & v_cnt >= 10'd210 & v_cnt < 10'd262);
+	assign enable_time_over[0] = (h_cnt >= 10'd375 & h_cnt < 10'd427 & v_cnt >= 10'd210 & v_cnt < 10'd262);
 
     always @(*) begin
 		if (enable_time_over[3]) begin
-			pixel_num_addr = (v_cnt-210) * SIZE + (h_cnt-133);
+			pixel_num_addr = (v_cnt-10'd210) * SIZE + (h_cnt-10'd213);
 		end else if (enable_time_over[2]) begin
-			pixel_num_addr = (v_cnt-210) * SIZE + (h_cnt-186);
+			pixel_num_addr = (v_cnt-10'd210) * SIZE + (h_cnt-10'd266);
 		end else if (enable_time_over[1]) begin
-			pixel_num_addr = (v_cnt-210) * SIZE + (h_cnt-242);
+			pixel_num_addr = (v_cnt-10'd210) * SIZE + (h_cnt-10'd322);
 		end else if (enable_time_over[0]) begin
-			pixel_num_addr = (v_cnt-210) * SIZE + (h_cnt-295);
+			pixel_num_addr = (v_cnt-10'd210) * SIZE + (h_cnt-10'd375);
 		end else begin
 			pixel_num_addr = 0;
 		end

@@ -1,5 +1,5 @@
 module Clock_Divider #(
-    parameter length = 4
+    parameter length = 3'd4
     ) (
     input wire clk,
     input wire rst,

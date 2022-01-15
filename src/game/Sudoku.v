@@ -1,8 +1,9 @@
 module Sudoku_Solver #(
-    parameter SIZE  = 81*4,
+    parameter SIZE  = 10'd324,
     parameter [1:0] SWAIT = 2'd0,
     parameter [1:0] SGAME = 2'd1,
     parameter [1:0] SFIN  = 2'd2,
+    parameter [1:0] SOVER  = 2'd3,
     parameter CFIN  = 32'd500000000
     ) (
     input wire              clk,
@@ -101,9 +102,10 @@ module Sudoku_Solver #(
                 else                next_state = state;
             end
             SFIN: begin
-                if(count == CFIN)   next_state = SWAIT;
+                if(count == CFIN)   next_state = SOVER;
                 else                next_state = state;
             end
+            SOVER:                  next_state = SWAIT;
             default:                next_state = state;
         endcase
     end

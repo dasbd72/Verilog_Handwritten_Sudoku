@@ -18,15 +18,15 @@ module Menu_Pixel_Gen (
     parameter SEND_CONNECT = 12'h456;
     parameter isCONNECT = 12'h1E1;
 
-    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 320 * (v_cnt>>1)) % 76800;
+    wire [16:0] pixel_background_addr = ((h_cnt>>1) + 10'd320 * (v_cnt>>1)) % 76800;
     wire [1:0] menu_mem;
 
     always @(*) begin
         case (menu_mem)
-            0: pixel_menu_out = BLACK;
-            1: pixel_menu_out = WHITE;
-            2: begin
-                if (v_cnt < 310) begin // Start button
+            2'd0: pixel_menu_out = BLACK;
+            2'd1: pixel_menu_out = WHITE;
+            2'd2: begin
+                if (v_cnt < 10'd310) begin // Start button
                     if (mouse_on_start_button) begin
                         if (MOUSE_LEFT) begin
                             pixel_menu_out = CLICK; 
