@@ -22,9 +22,7 @@ module Timer (
     always @(posedge clk) begin
         if (rst) begin
             time_spent <= 16'b0;
-        end else if (state != 2'd1) begin
-            time_spent <= time_spent;
-        end else if (dclk) begin
+        end else if (state == 2'd1 & dclk) begin
             time_spent <= time_spent_next;
         end else begin
             time_spent <= time_spent;
