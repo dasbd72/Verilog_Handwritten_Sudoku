@@ -1,5 +1,9 @@
 # Sudoku
 
+## Description
+
+A sudoku game on FPGA that supports hand written digit input.
+
 ## Reference
 
 [float 32 calculation](https://en.wikipedia.org/wiki/Single-precision_floating-point_format)
